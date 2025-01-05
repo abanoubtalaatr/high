@@ -1,0 +1,37 @@
+.modal-footer {
+  justify-content: space-between !important;
+}
+.alert {
+  margin-bottom: 2rem !important;
+}
+.nav-line-tabs .nav-item .nav-link {
+  margin: 0.8rem;
+  margin-bottom: 0 !important;
+}
+.react-select__control {
+  border: 0 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  background-color: var(--bs-gray-100) !important;
+  border-color: var(--bs-gray-100) !important;
+  color: var(--bs-gray-700) !important;
+}
+.react-select__single-value {
+  color: var(--bs-gray-700) !important;
+}
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+  vertical-align: middle !important;
+}
+.pac-container {
+  z-index: 1060 !important;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
