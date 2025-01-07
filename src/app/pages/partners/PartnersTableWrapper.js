@@ -97,7 +97,7 @@ function PartnersTableWrapper() {
                 type='button'
                 className={`btn ${classPendingButton} btn-sm`}
                 onClick={(s) => {
-                  statusHandler('-1', 'pending')
+                  statusHandler('waiting', 'pending')
                 }}
               >
                 pending
@@ -106,7 +106,7 @@ function PartnersTableWrapper() {
                 type='button'
                 className={`btn ${classActiveButton} btn-sm`}
                 onClick={(s) => {
-                  statusHandler('1', 'active')
+                  statusHandler('active', 'active')
                 }}
               >
                 active
@@ -115,7 +115,7 @@ function PartnersTableWrapper() {
                 type='button'
                 className={`btn ${classInactiveButton} btn-sm`}
                 onClick={(s) => {
-                  statusHandler('0', 'inactive')
+                  statusHandler('inactive', 'inactive')
                 }}
               >
                 inactive

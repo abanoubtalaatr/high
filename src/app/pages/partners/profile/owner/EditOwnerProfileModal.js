@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import * as Yup from 'yup'
 import {useParams} from 'react-router-dom'
 import {useFormik} from 'formik'
@@ -9,14 +9,18 @@ import CountryDropdown from './CountryDropdown'; // Import the new component
 
 function EditOwnerProfileModal(props) {
   const {userId} = useParams()
-  const {show, onHide, onComplete, name, email, phone} = props
+  const {show, onHide, onComplete, name, email, phone, country} = props
+  console.log(country, 'country selected')
   const [selectedCountry, setSelectedCountry] = useState('');
   // Add this handler for the country selection
   const handleCountryChange = (countryCode) => {
     
     setSelectedCountry(countryCode);
-    console.log(countryCode, 'code country')
+    
   };
+  useEffect(() => {
+    setSelectedCountry(country);
+  }, [country])
 
   const phoneRegExp =
     /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
@@ -55,7 +59,7 @@ function EditOwnerProfileModal(props) {
       formData.append('name', values.name)
       formData.append('email', values.email)
       formData.append('phone', values.phone)
-      formData.append('country', "SA");
+      formData.append('country', selectedCountry);
       try {
         await updateOwnerInfo(formData, userId).then((res) => {
           resetForm()
@@ -130,7 +134,7 @@ function EditOwnerProfileModal(props) {
           <div className="row mb-5">
             <label className="col-sm-3 form-label fw-bold">Country:</label>
             <div className="col-sm-9">
-              <CountryDropdown onSelect={handleCountryChange} />
+              <CountryDropdown onSelect={handleCountryChange} selectedCountry={selectedCountry}/>
             </div>
           </div>
           <div className='row mb-5'>

@@ -114,7 +114,7 @@ function UnitsPage() {
               type='button'
               className={`btn ${classPendingButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('2', 'pending')
+                statusHandler('waiting', 'pending')
               }}
             >
               pending
@@ -123,7 +123,7 @@ function UnitsPage() {
               type='button'
               className={`btn ${classApprovedButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('1', 'approved')
+                statusHandler('active', 'approved')
               }}
             >
               approved
@@ -132,7 +132,7 @@ function UnitsPage() {
               type='button'
               className={`btn ${classNotApproveButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('0', 'not-approved')
+                statusHandler('inactive', 'not-approved')
               }}
             >
               not approved

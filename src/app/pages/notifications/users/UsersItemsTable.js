@@ -72,7 +72,7 @@ function UsersItemsTable(props) {
                     </td>
                     <td className='text-center'>
                       <Link
-                        to={`/notifications/edit/${e.id}`}
+                        to={`/notifications/users/edit/${e.id}`}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
                       >
                         <KTIcon iconName='pencil' className='fs-3' />

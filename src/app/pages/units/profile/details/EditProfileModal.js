@@ -292,7 +292,7 @@ function EditProfileModal(props) {
     validationSchema: formSchema,
     onSubmit: async (values, {setStatus, setFieldValue}) => {
       setLoading(true)
-      console.log('you are here now mr');
+      
       try {
         
         await updateUnitInfo(values, unitId).then((res) => {

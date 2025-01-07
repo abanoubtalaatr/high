@@ -15,13 +15,13 @@ function EditModal(props) {
   const formSchema = Yup.object().shape({
     tax_name: Yup.string()
       .required('this field is required')
-      .min(2, 'Minimum 3 symbols')
+      
       .max(50, 'Maximum 50 symbols'),
     tax: Yup.string()
       .required('this field is required')
-      .min(2, 'Minimum 3 symbols')
+      
       .max(5, 'Maximum 50 symbols')
-      .matches(numberRegExp, 'number is not valid'),
+      // .matches(numberRegExp, 'number is not valid'),
   })
   const [statusChoice, setStatusChoice] = useState([])
   const statusOptions = [

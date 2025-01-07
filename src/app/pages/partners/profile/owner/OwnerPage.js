@@ -59,6 +59,7 @@ function OwnerPage() {
             name={(userDetails.owner_name && userDetails.owner_name) || ''}
             email={(userDetails.email && userDetails.email) || ''}
             phone={(userDetails.partner_phone && userDetails.partner_phone) || ''}
+            country={(userDetails?.country?.iso && userDetails.country.iso) || ''}
           />
         )}
         {/* end modal */}

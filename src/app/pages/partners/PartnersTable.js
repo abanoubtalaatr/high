@@ -78,10 +78,10 @@ function PartnersTable(props) {
                   <td className='text-center'>
                     <span
                       className={`badge badge-light-${
-                        e.active === -1 ? 'warning' : e.active === 1 || e.active === 'active' ? 'primary' : 'danger'
+                        e.active === 'waiting' ? 'warning' : e.active === 1 || e.active === 'active' ? 'primary' : 'danger'
                       }`}
                     >
-                      {e.active === -1 ? 'pending' : e.active === 1 || e.active === 'active' ? 'active' : 'inactive'}
+                      {e.active === 'waiting' ? 'pending' : e.active === 1 || e.active === 'active' ? 'active' : 'inactive'}
                     </span>
                   </td>
                   <td className='text-center'>

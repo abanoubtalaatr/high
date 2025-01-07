@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {KTIcon, toAbsoluteUrl} from '../../../../_metronic/helpers'
 import EditLanguageModal from './EditLanguageModal'
 import DeleteModal from './DeleteModal'
+import { Link } from 'react-router-dom'
 
 function LanguagesTable(props) {
   const {items, onComplete} = props
@@ -73,6 +74,13 @@ function LanguagesTable(props) {
                     </span>
                   </td>
                   <td className='text-center'>
+                  <Link
+                      to={`${e.id}/translation`}
+                      state={e}
+                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
+                    >
+                      <i className='fa-solid fa-globe fs-3'></i>
+                    </Link>
                     <button
                       className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
                       onClick={() => openEditModal(e)}

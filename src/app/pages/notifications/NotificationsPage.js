@@ -99,7 +99,7 @@ function NotificationsPage() {
           }
         />
          <Route
-          path='notifications/edit:itemId'
+          path='/users/edit:itemId'
           element={
             <>
               <CreateUserToolbarWrapper />

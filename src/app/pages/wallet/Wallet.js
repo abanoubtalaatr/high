@@ -17,6 +17,7 @@ import ExchangesToolbarWrapper from './exchanges/ExchangesToolbarWrapper'
 import PublicEventView from '../public-events/PublicEventView'
 import TransactionViewToolbarWrapper from './transactions/TransactionViewToolbarWrapper'
 import BookingView from '../bookings/BookingView'
+import Translation from '../../modules/translations/Translation'
 
 function Wallet() {
   const intl = useIntl()
@@ -161,6 +162,14 @@ function Wallet() {
                 startRefreshTable={refreshTableHandler}
                 stopRefresh={stopRefreshTableHandler}
               />
+            </>
+          }
+        />
+         <Route
+          path='currencies/:itemId/translation'
+          element={
+            <>
+              <Translation modelName={'currency'} model={'currencies'} />
             </>
           }
         />

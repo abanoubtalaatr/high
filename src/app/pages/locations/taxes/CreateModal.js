@@ -15,12 +15,11 @@ function CreateModal(props) {
   const formSchema = Yup.object().shape({
     tax_name: Yup.string()
       .required('this field is required')
-
       .max(50, 'Maximum 50 symbols'),
     tax: Yup.string()
       .required('this field is required')
       .max(5, 'Maximum 50 symbols')
-      .matches(numberRegExp, 'number is not valid'),
+      // .matches(numberRegExp, 'number is not valid'),
   })
 
   const [loading, setLoading] = useState(false)

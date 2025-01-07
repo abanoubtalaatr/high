@@ -118,11 +118,11 @@ export function getComments(props, userId) {
 export function deleteComment(userId, itemId) {
   return axios.delete(USERS_URL + '/' + userId + '/comments/' + itemId)
 }
-// restore comment
 
-export function restoreComment(userId, itemId) {
-  const url = `${USERS_URL}/${userId}/comments/${itemId}/restore`;
-  console.log('Restore Comment URL:', url); // Debug the URL
+
+//restore comment
+export function restoreComment(unitId, commentId) {
+  const url = `${API_URL}/units/${unitId}/comments/${commentId}/restore`;
   return axios.put(url);
 }
 

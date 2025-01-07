@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { KTIcon } from '../../../../_metronic/helpers'
 import EditModal from './EditModal'
+import { Link } from 'react-router-dom'
 
 function ItemsTable(props) {
   const { items, selectedCurrency } = props
@@ -39,6 +40,7 @@ function ItemsTable(props) {
                   <td className='text-center'>{e.code}</td>
                   {/* <td className=''>1 = {e.exchange_rate} {selectedCurrency}</td> */}
                   {/* <td className=''>1 = {e.exchange_rate} {selectedCurrency}</td> */}
+                  
                   <td className='text-center'>
                     <span className={`badge badge-light-${e.active === 1 ? 'primary' : 'danger'}`}>
                       {e.active === 1 ? 'active' : 'inactive'}
@@ -51,6 +53,13 @@ function ItemsTable(props) {
                     >
                       <KTIcon iconName='pencil' className='fs-3' />
                     </button>
+                    <Link
+                      to={`${e.id}/translation`}
+                      state={e}
+                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
+                    >
+                      <i className='fa-solid fa-globe fs-3'></i>
+                    </Link>
                   </td>
                 </tr>
               )

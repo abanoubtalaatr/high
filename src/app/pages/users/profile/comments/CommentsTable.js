@@ -31,10 +31,9 @@ function CommentsTable({ items, onComplete }) {
     onComplete(true);
   };
 
-  const restoreHandler =  (id) => {
+  const restoreHandler =  (sessionId, commentId) => {
     try {
-      console.log(userId, id, 'user id and id');
-       restoreComment(userId, id);
+       restoreComment(sessionId, commentId);
       alert('Comment restored successfully.');
       onComplete(true);
     } catch (error) {
@@ -84,7 +83,7 @@ function CommentsTable({ items, onComplete }) {
                 {e.status === 0 ? (
                   <button
                     className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-                    onClick={() => restoreHandler(e.id)}
+                    onClick={() => restoreHandler(e.session_id, e.id)}
                   >
                     <i className="fa-solid fa-trash-arrow-up"></i>
                   </button>

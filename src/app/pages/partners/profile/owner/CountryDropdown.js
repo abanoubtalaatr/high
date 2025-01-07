@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCountries } from '../../_requests';
 
-function CountryDropdown({ onSelect }) {
+function CountryDropdown({ onSelect, selectedCountry }) {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,11 @@ function CountryDropdown({ onSelect }) {
   }
 
   return (
-    <select className="form-control" onChange={(e) => onSelect(e.target.value)}>
+    <select
+      className="form-control"
+      onChange={(e) => onSelect(e.target.value)}
+      value={selectedCountry || ""} // Set the selected value
+    >
       <option value="">Select a country</option>
       {countries.map((country) => (
         <option key={country.code} value={country.iso}>

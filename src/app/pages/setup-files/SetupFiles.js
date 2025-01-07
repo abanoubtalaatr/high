@@ -105,6 +105,14 @@ function SetupFiles() {
             </>
           }
         />
+         <Route
+          path='languages/:itemId/translation'
+          element={
+            <>
+              <Translation modelName={'language'} model={'languages'} />
+            </>
+          }
+        />
         <Route index element={<Navigate to='/setup-files/types' />} />
       </Route>
     </Routes>

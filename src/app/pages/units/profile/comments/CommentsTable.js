@@ -46,6 +46,7 @@ function CommentsTable(props) {
             <th className='min-w-100px '>user</th>
             <th className='min-w-200px text-center'>comment</th>
             <th className='min-w-100px text-center'>comment on</th>
+            <th className='min-w-100px text-center'>deletion reason</th>
             <th className='min-w-100px text-center'>rating</th>
             <th className='min-w-100px text-center'>status</th>
             <th className='min-w-100px text-center'>Actions</th>
@@ -86,6 +87,9 @@ function CommentsTable(props) {
                       #{e.session_id || '---'}
                     </span>
                   </div>
+                </td>
+                <td className='text-center'>
+                  {e.deleted_reason || '---'}
                 </td>
                 <td className='text-center'>
                   <i className='fa fa-star me-1 text-warning fs-6'></i>

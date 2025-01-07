@@ -5,7 +5,8 @@ import { deleteActivityCategory } from '../_requests'
 
 
 function DeleteModal(props) {
-  const {show, onHide, itemId} = props
+  const {show, onHide, itemId, activityCategoryId} = props
+  
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [alertType, setAlertType] = useState('')
@@ -22,11 +23,13 @@ function DeleteModal(props) {
   useEffect(() => {
     if (confirmDelete) {
       try {
-        deleteActivityCategory(itemId).then((res) => {
+        deleteActivityCategory(itemId, activityCategoryId).then((res) => {
           setAlertType('success')
           setAlertMessage(res.data.message)
           setConfirmDelete(false)
           setShowModal(false)
+          onHide(true)
+          window.location.reload()
         })
       } catch (err) {
         setAlertType('danger')

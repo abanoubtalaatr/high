@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 function ItemsTable(props) {
   const { items, onComplete } = props
   const [itemID, setItemId] = useState('')
+  const [activityCategoryId, setActivityCategoryId] = useState('')
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -18,9 +19,10 @@ function ItemsTable(props) {
     setShowEditModal(true)
     setItemId(id)
   }
-  const openDeleteModal = (id) => {
+  const openDeleteModal = (id, activityCategoryId) => {
     setShowDeleteModal(true)
     setItemId(id)
+    setActivityCategoryId(activityCategoryId)
   }
   const closeEditModal = () => setShowEditModal(false)
   const closeDeleteModal = () => setShowDeleteModal(false)
@@ -122,7 +124,7 @@ function ItemsTable(props) {
                     </button>
                     <button
                       className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                      onClick={() => openDeleteModal(e.id)}
+                      onClick={() => openDeleteModal(e.id, e.activity_category_id)}
                     >
                       <KTIcon iconName='trash' className='fs-3' />
                     </button>
@@ -144,7 +146,7 @@ function ItemsTable(props) {
         />
       )}
       {showDeleteModal && (
-        <DeleteModal show={showDeleteModal} onHide={closeDeleteModal} itemId={itemID} />
+        <DeleteModal show={showDeleteModal} onHide={closeDeleteModal} itemId={itemID} activityCategoryId={activityCategoryId}/>
       )}
     </>
   )
