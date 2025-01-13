@@ -79,8 +79,8 @@ export function updateCountry(values, itemIso) {
       timezone: values.timezone,
       active: values.active,
       place_id: values.place_id,
-      latitude: values.latitude,
-      longitude: values.longitude,
+      latitude: Number(values.latitude),
+      longitude: Number(values.longitude),
     }
   )
 }

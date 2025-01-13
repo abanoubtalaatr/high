@@ -27,7 +27,8 @@ function AddFundModal(props) {
     onSubmit: async (values, {setStatus, resetForm, setFieldValue}) => {
       setLoading(true)
       try {
-        await addWalletFunds(values.amount, values.reason, userId).then((res) => {
+        console.log(values)
+        await addWalletFunds(values.amount, values.refund_reason, userId).then((res) => {
           setAlertType('success')
           resetForm()
           setStatus(res.data.message)

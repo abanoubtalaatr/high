@@ -69,11 +69,11 @@ function FundModal(props) {
               </tr>
               <tr>
                 <td>action by:</td>
-                <td className='text-gray-700'>{transactionDetails.action_by ? transactionDetails.action_by.name : '---'}</td>
+                <td className='text-gray-700'>{transactionDetails.user ? transactionDetails.user.name : '---'}</td>
               </tr>
               <tr>
                 <td>action date:</td>
-                <td className='text-gray-700'>{transactionDetails.action_at || '---'}</td>
+                <td className='text-gray-700'>{transactionDetails.initiated_at || '---'}</td>
               </tr>
             </tbody>
             {/* end::Table body */}

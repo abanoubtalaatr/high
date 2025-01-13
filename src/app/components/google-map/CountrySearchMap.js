@@ -1,9 +1,11 @@
+ /* global google */
 import {memo, useMemo, useRef, useState} from 'react'
 import {GoogleMap, Marker, InfoWindow, useJsApiLoader, Autocomplete} from '@react-google-maps/api'
 
 const libraries = ['places']
 function CountrySearchMap(props) {
   const {center, country, marker, mapResult} = props
+  console.log(center, country, marker, mapResult)
   const [mapCenter, setMapCenter] = useState(center)
   const [mapZoom, setMapZoom] = useState(1)
   const [mapMarker, setMapMarker] = useState(marker)
@@ -50,24 +52,27 @@ function CountrySearchMap(props) {
   }
   // when search results in autocomplete
   const handlePlaceChanged = () => {
-    const {geometry, place_id, types, address_components} = autocompleteRef.current.getPlace()
-    const bounds = new window.google.maps.LatLngBounds()
-    if (geometry) {
-      if (geometry.viewport) {
-        bounds.union(geometry.viewport)
-      } else {
-        bounds.extend(geometry.location)
+    if (typeof google !== 'undefined' && autocompleteRef.current) {
+      const { geometry, place_id, address_components } = autocompleteRef.current.getPlace();
+      if (geometry) {
+        const bounds = new google.maps.LatLngBounds();
+        if (geometry.viewport) {
+          bounds.union(geometry.viewport);
+        } else {
+          bounds.extend(geometry.location);
+        }
+        mapRef.current.fitBounds(bounds);
+        setMapCenter(geometry.location);
+        mapResult({
+          place_id,
+          short_name: address_components[0].short_name,
+          location: geometry.location,
+        });
+        setMapMarkerShow(true);
       }
-      mapRef.current.fitBounds(bounds)
-      setMapCenter(geometry.location)
-      mapResult({
-        place_id: place_id,
-        short_name: address_components[0].short_name,
-        location: geometry.location,
-      })
-      setMapMarkerShow(true)
     }
-  }
+  };
+  
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}

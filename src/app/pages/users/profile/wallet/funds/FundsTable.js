@@ -83,18 +83,18 @@ function FundsTable(props) {
                 </td>
                 <td className='text-center'>{e.initiated_at || '---'}</td>
                 <td className='text-center'>
-                  {e.action_by ? (
+                  {e.user ? (
                     <Link
-                      to={`/users/profile/${e.action_by.id}/details`}
+                      to={`/users/profile/${e.user.id}/details`}
                       className='text-dark fw-bold text-hover-primary'
                     >
-                      <span>{e.action_by.name}</span>
+                      <span>{e.user.name}</span>
                     </Link>
                   ) : (
                     '---'
                   )}
                 </td>
-                <td className='text-center'>{e.action_at || '---'}</td>
+                <td className='text-center'>{e.initiated_at || '---'}</td>
                 <td className='text-center'>
                   {e.status.toLowerCase() === 'pending' && (
                     <button

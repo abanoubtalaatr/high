@@ -1,52 +1,65 @@
-import React, { useEffect, useState } from 'react'
-import Select from 'react-select'
-import axios from 'axios'
-import { getCountries } from './_requests' // Adjust the import path if needed
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import { getCountries, getGeneralJobs } from './_requests'; // Import getJobs from the API helper
 
 export function FilterDropdown({ onApplyFilters }) {
-  const [countryOptions, setCountryOptions] = useState([])
-  const [jobOptions, setJobOptions] = useState([
-    { value: 'all', label: 'all' },
-    { value: 'job', label: 'job 1' },
-    { value: 'job', label: 'job 2' },
-  ])
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [jobOptions, setJobOptions] = useState([]);
   const [statusOptions, setStatusOptions] = useState([
-    { value: 'all', label: 'all' },
-    { value: 'active', label: 'active' },
-    { value: 'inactive', label: 'inactive' },
-  ])
+    { value: 'all', label: 'All' },
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' },
+  ]);
 
-  const [countryChoice, setCountryChoice] = useState({ value: 'all', label: 'all' })
-  const [jobChoice, setJobChoice] = useState(jobOptions[0])
-  const [statusChoice, setStatusChoice] = useState(statusOptions[0])
+  const [countryChoice, setCountryChoice] = useState({ value: 'all', label: 'All' });
+  const [jobChoice, setJobChoice] = useState(null); // Initially set to null
+  const [statusChoice, setStatusChoice] = useState(statusOptions[0]);
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await getCountries();
         setCountryOptions([
-          { value: 'all', label: 'all' },
+          { value: 'all', label: 'All' },
           ...response.data.data.map(country => ({
-            value: country.name,
-            label: country.name,
-            iso: country.iso, // Assuming 'iso' is a property in the API response
+            value: country.iso, // Use ISO code as value
+            label: country.name, // Use country name as label
+            iso: country.iso, // Include ISO for future use
           }))
         ]);
       } catch (error) {
-        console.error("Failed to fetch countries", error);
+        console.error('Failed to fetch countries', error);
+      }
+    };
+
+    const fetchJobs = async () => {
+      try {
+        const response = await getGeneralJobs();
+        console.log(response.data.data, 'resonse')
+        setJobOptions([
+          { value: 'all', label: 'All' },
+          ...response.data.data.map(job => ({
+            value: job.id, // Use job ID
+            label: job.name, // Use job name
+          }))
+        ]);
+        setJobChoice({ value: 'all', label: 'All' }); // Default to 'All'
+      } catch (error) {
+        console.error('Failed to fetch jobs', error);
       }
     };
 
     fetchCountries();
+    fetchJobs();
   }, []);
 
   const applyHandler = () => {
-    console.log(countryChoice, 'selected country');
-    // Call the parent component's apply filter method with selected values
+    const status = (statusChoice.value === 'all' || statusChoice.value === 'All') ? '' : statusChoice.value;
+
     onApplyFilters({
-      country: countryChoice.iso, // Use ISO code here
-      job: jobChoice.value,
-      status: statusChoice.value,
+      country: countryChoice.value, // Send the country ISO code
+      job_id: jobChoice.value, // Send the job ID
+      
     });
   };
 
@@ -58,44 +71,30 @@ export function FilterDropdown({ onApplyFilters }) {
       <div className='separator border-gray-200'></div>
       <div className='px-7 py-5'>
         <div className='mb-3'>
-          <label className='form-label fw-bold'>country:</label>
+          <label className='form-label fw-bold'>Country:</label>
           <div>
             <Select
               className='react-select-container'
               classNamePrefix='react-select'
               placeholder='Select country'
               name='country'
-              defaultValue={countryOptions[0]}
+              value={countryChoice} // Controlled component
               options={countryOptions}
               onChange={setCountryChoice}
             />
           </div>
         </div>
         <div className='mb-3'>
-          <label className='form-label fw-bold'>job:</label>
+          <label className='form-label fw-bold'>Job:</label>
           <div>
             <Select
               className='react-select-container'
               classNamePrefix='react-select'
               placeholder='Select job'
               name='job'
-              defaultValue={jobOptions[0]}
+              value={jobChoice} // Controlled component
               options={jobOptions}
               onChange={setJobChoice}
-            />
-          </div>
-        </div>
-        <div className='mb-10'>
-          <label className='form-label fw-bold'>status:</label>
-          <div>
-            <Select
-              className='react-select-container'
-              classNamePrefix='react-select'
-              placeholder='Select status'
-              name='status'
-              defaultValue={statusOptions[0]}
-              options={statusOptions}
-              onChange={setStatusChoice}
             />
           </div>
         </div>

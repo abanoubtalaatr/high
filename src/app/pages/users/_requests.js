@@ -105,7 +105,7 @@ export function updateWalletCashOut(status, action_reason, userId, itemId) {
 export function addWalletFunds(amount, action_reason, userId) {
   return axios.post(USERS_URL + '/' + userId + '/wallet-fund', {
     amount: amount,
-    action_reason: action_reason,
+    reason: action_reason,
   })
 }
 // comments

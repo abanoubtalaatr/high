@@ -191,6 +191,7 @@ function EditModal(props) {
   }
   const servicesDefaultValue = () => {
     const services_defaultValue = []
+
     if (initialValues.services.length > 0) {
       for (let s = 0; s < initialValues.services.length; s++) {
         const sv = servicesOptions.filter((option) => option.value == initialValues.services[s].id)
@@ -199,7 +200,9 @@ function EditModal(props) {
         }
       }
     }
+    console.log('here services', services_defaultValue)
     if (services_defaultValue.length > 0) {
+      
       setServiceChoice(services_defaultValue)
       let selected = Array.isArray(services_defaultValue) ? services_defaultValue.map((x) => x.value) : []
       setInitialValues({ ...initialValues, services: selected })
@@ -217,6 +220,7 @@ function EditModal(props) {
   useEffect(() => {
     try {
       getactivity(catId, itemId).then((res) => {
+        
         const newData = res.data.data
         setInitialValues({ ...newData })
         setAlertType('success')
@@ -231,6 +235,9 @@ function EditModal(props) {
         getCapacitiesHandler()
         // get services
         getServicesHandler()
+        setServiceChoice(newData.services.map((service)=>{
+          return {value: service.id, label: service.name}}
+        )) 
       })
     } catch (err) {
       setAlertType('danger')
@@ -242,8 +249,8 @@ function EditModal(props) {
   }, [])
   // get types
   const getTypesHandler = () => {
-    setIsTypesLoading(true)
-    setIsTypesDisabled(true)
+    setIsTypesLoading(false)
+    setIsTypesDisabled(false)
     getTypes()
       .then((res) => {
         typesOptionsHandler(res.data.data)
@@ -298,9 +305,9 @@ function EditModal(props) {
   useEffect(() => {
     capacitiesDefaultValue()
   }, [capacitiesOptions])
-  useEffect(() => {
-    servicesDefaultValue()
-  }, [servicesOptions])
+  // useEffect(() => {
+  //   servicesDefaultValue()
+  // }, [servicesOptions])
   // const initialValues = initialValues
   const formik = useFormik({
     initialValues: initialValues,
@@ -318,10 +325,13 @@ function EditModal(props) {
       formData.append('max_users_no', values.max_users_no)
       formData.append('activity_category_id', values.activity_category_id)
       values.types.forEach((type) => formData.append('types[]', type))
+
       values.capacities.forEach((capacity) => {
         formData.append('capacities[]', capacity.value ?? capacity);
-      });      values.services.forEach((service) => {
-        formData.append('services[]', service.value ?? service);
+      });   
+      console.log(values.services, 'services our')
+      values.services.forEach((service) => {
+        formData.append('services[]', service.value ?? service.id);
       });
       
       try {

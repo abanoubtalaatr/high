@@ -1,13 +1,13 @@
-import { KTIcon, toAbsoluteUrl } from '../../../../../_metronic/helpers'
+import {KTIcon, toAbsoluteUrl} from '../../../../../_metronic/helpers'
 import DeleteModal from './DeleteModal'
-import { useState } from 'react'
+import {useState} from 'react'
 import CommentViewModal from './CommentViewModal'
-import { useParams } from 'react-router-dom'
-import { restoreComment } from '../../_requests'
+import {useParams} from 'react-router-dom'
+import {restoreComment} from '../../_requests'
 
 function CommentsTable(props) {
-  const { unitId } = useParams()
-  const { items, onComplete } = props
+  const {unitId} = useParams()
+  const {items, onComplete} = props
   const [itemID, setItemId] = useState('')
   const [comment, setComment] = useState('')
   const [userName, setUserName] = useState('')
@@ -80,25 +80,32 @@ function CommentsTable(props) {
                 <td className='text-center'>{e.comment || '---'}</td>
                 <td className='text-center'>
                   <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-6'>
-                      public event
-                    </span>
-                    <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                      #{e.session_id || '---'}
-                    </span>
+                    {e.type === 'Public event' ? (
+                      <>
+                        <span className='text-dark fw-bold fs-6'>{e.type || '---'}</span>
+                        <span className='text-muted fw-semibold d-block fs-7'>
+                          #{e.session_id || '---'}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className='text-dark fw-bold fs-6'>{e.type}</span>
+                        <span className='text-muted fw-semibold d-block fs-7'>#{e.id}</span>
+                      </>
+                    )}
                   </div>
                 </td>
-                <td className='text-center'>
-                  {e.deleted_reason || '---'}
-                </td>
+
+                <td className='text-center'>{e.deleted_reason || '---'}</td>
                 <td className='text-center'>
                   <i className='fa fa-star me-1 text-warning fs-6'></i>
                   {e.rate || 0}
                 </td>
                 <td className='text-center'>
                   <span
-                    className={`badge badge-light-${e.status === 0 ? 'dark' : e.status === 1 ? 'danger' : 'primary'
-                      }`}
+                    className={`badge badge-light-${
+                      e.status === 0 ? 'dark' : e.status === 1 ? 'danger' : 'primary'
+                    }`}
                   >
                     {e.status === 0 ? 'deleted' : e.status === 1 ? 'deletion request' : 'published'}
                   </span>

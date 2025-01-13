@@ -172,7 +172,7 @@ function EditCountryModal(props) {
     enableReinitialize: true,
     validationSchema: formSchema,
     onSubmit: async (values, { setStatus, resetForm }) => {
-      if (googleMapDetails) {
+      // if (googleMapDetails) {
         setLoading(true)
         try {
           await updateCountry(values, itemDetails.iso).then((res) => {
@@ -190,10 +190,10 @@ function EditCountryModal(props) {
           setAlertMessage(error.response.data.message)
           setLoading(false)
         }
-      } else {
-        setAlertType('danger')
-        setAlertMessage('Please Select the location on the Map')
-      }
+      // } else {
+      //   setAlertType('danger')
+      //   setAlertMessage('Please Select the location on the Map')
+      // }
     },
   })
   return (

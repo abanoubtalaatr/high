@@ -1,15 +1,18 @@
 import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
+export const GENERAL_TYPES_URL = `${API_URL}/types`
 export const TYPES_URL = `${API_URL}/types`
 export const CAPACITIES_URL = `${API_URL}/capacities`
+export const GENERAL_CAPACITIES_URL = `${API_URL}/general/capacities`
 export const SERVICES_URL = `${API_URL}/services`
+export const GENERAL__SERVICES_URL = `${API_URL}/services`
 export const AGE_GROUPS_URL = `${API_URL}/age-groups`
 export const LANGUAGES_URL = `${API_URL}/languages`
 export const TRANSLATIONS_URL = `${API_URL}/translations`
 // types
 export function getTypes(props) {
-  return axios.get(TYPES_URL, {
+  return axios.get(GENERAL_TYPES_URL, {
     params: props,
   })
 }
@@ -63,7 +66,8 @@ export function deleteAgeGroup(itemId) {
 }
 // capacities
 export function getCapacities(props) {
-  return axios.get(CAPACITIES_URL, {
+  
+  return axios.get(GENERAL_CAPACITIES_URL, {
     params: props,
   })
 }

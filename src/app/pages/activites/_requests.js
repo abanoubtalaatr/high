@@ -46,6 +46,14 @@ export function deleteActivityCategory(itemId, activityCategoryId) {
     },
   })
 }
+
+export function deleteCategory(itemId) {
+  return axios.delete(ACTIVITIES_CATEGORIES_URL  + '/'+itemId , {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  })
+}
 //activities
 export function getActivities(parms, cat_id) {
   return axios.get(ACTIVITIES_CATEGORIES_URL + '/' + cat_id + '/activities', {

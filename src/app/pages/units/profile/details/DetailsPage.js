@@ -107,12 +107,12 @@ function DetailsPage() {
                   {unitDetails.type ? unitDetails.type.name : '---'}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td className='w-lg-300px'>size</td>
                 <td className='text-gray-700 fw-bolder'>
                   {`${unitDetails.length || '0'} x ${unitDetails.width || '0'} `}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <td className='w-lg-300px'>capacity</td>
                 <td className='text-gray-700 fw-bolder'>{unitDetails.capacity || '---'}</td>

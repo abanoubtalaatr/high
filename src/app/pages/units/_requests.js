@@ -97,8 +97,10 @@ export function updateLocation(values, itemId) {
   // })
 }
 // comments
-export function getComments(props, unitId) {
-  return axios.get(UNITS_URL + '/' + unitId + '/comments')
+export function getComments(params, unitId) {
+  return axios.get(UNITS_URL + '/' + unitId + '/comments', {
+    params: params,
+  })
 }
 // delete comment
 export function deleteComment(unitId, itemId) {

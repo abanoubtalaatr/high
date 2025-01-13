@@ -6,6 +6,7 @@ export const CREATE_EMPLOYEES_URL = `${API_URL}/employees`
 export const DELETE_EMPLOYEES_URL = `${API_URL}/employees`
 export const SET_PASSWORD_URL = `${API_URL}/employees/set-password`
 export const JOBS_URL = `${API_URL}/jobs`
+export const GENERAL_JOBS_URL = `${API_URL}/general/jobs`
 export const COUNTRIES_URL = `${API_URL}/general/countries`
 
 export function getEmployees(props) {
@@ -45,6 +46,12 @@ export function getJobs(props) {
     params: props,
   })
 }
+export function getGeneralJobs(props) {
+  return axios.get(GENERAL_JOBS_URL, {
+    params: props,
+  })
+}
+
 export function createjob(name, desc, active) {
   return axios.post(JOBS_URL, {
     name: name,

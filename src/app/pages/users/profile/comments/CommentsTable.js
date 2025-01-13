@@ -83,7 +83,7 @@ function CommentsTable({ items, onComplete }) {
                 {e.status === 0 ? (
                   <button
                     className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-                    onClick={() => restoreHandler(e.session_id, e.id)}
+                    onClick={() => restoreHandler(e.unit_id, e.id)}
                   >
                     <i className="fa-solid fa-trash-arrow-up"></i>
                   </button>

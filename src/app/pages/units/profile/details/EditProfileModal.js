@@ -17,7 +17,7 @@ import Select from 'react-select'
 function EditProfileModal(props) {
   const {unitId} = useParams()
   const {show, onHide, onComplete, unitDetails} = props
-  
+
   // form validation
   const formSchema = Yup.object().shape({
     name: Yup.string()
@@ -60,10 +60,12 @@ function EditProfileModal(props) {
       label: 'both',
     },
   ])
+  const [isReady, setIsReady] = useState(false)
+
   const [genderChoice, setGenderChoice] = useState([])
   const [loading, setLoading] = useState(false)
   const [alertType, setAlertType] = useState('success')
-  
+
   const [initialValues, setinitialValues] = useState({
     name: unitDetails.name,
     category_id: unitDetails.activity_category ? unitDetails.activity_category.id : 0,
@@ -104,18 +106,25 @@ function EditProfileModal(props) {
     setGenderChoice(defaultValue)
   }
   const servicesDefaultValue = () => {
-    const values = []
-    if (unitDetails.services.length > 0) {
-      for (let i = 0; i < unitDetails.services.length; i++) {
-        const v = servicesOptions.filter((option) => option.value == unitDetails.services[i].id)
-        for (let i = 0; i < v.length; i++) {
-          values.push(v[i])
-        }
-      }
+    if (unitDetails.services && unitDetails.services.length > 0) {
+      const values = unitDetails.services
+        .map((service) => servicesOptions.find((option) => option.value === service.id))
+        .filter(Boolean) // Remove any undefined values
+
+      setServiceChoice(values)
+      formik.setFieldValue('services', values) // Sync with formik
+      setIsReady(true) // Mark as ready for rendering
+    } else {
+      setIsReady(true) // No services, but still ready
     }
-    setinitialValues({...initialValues, services: values})
-    setServiceChoice(values)
   }
+
+  // Call servicesDefaultValue when unitDetails changes
+  useEffect(() => {
+    if (unitDetails && unitDetails.services) {
+      servicesDefaultValue()
+    }
+  }, [unitDetails])
 
   const onChangeActivity = (choice) => {
     setActivityChoice(choice)
@@ -292,13 +301,13 @@ function EditProfileModal(props) {
     validationSchema: formSchema,
     onSubmit: async (values, {setStatus, setFieldValue}) => {
       setLoading(true)
-      
+
       try {
-        
         await updateUnitInfo(values, unitId).then((res) => {
           setAlertType('success')
           setLoading(false)
           onComplete()
+          window.location.reload();
         })
       } catch (error) {
         setAlertType('danger')
@@ -449,21 +458,24 @@ function EditProfileModal(props) {
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>service:</label>
             <div className='col-sm-9'>
-              <Select
-                isMulti
-                closeMenuOnSelect={false}
-                isLoading={isServicesLoading}
-                isDisabled={isServicesDisabled}
-                isSearchable={true}
-                className='react-select-container'
-                classNamePrefix='react-select'
-                placeholder='select services'
-                name='services'
-                defaultValue={!isServicesDisabled ? serviceChoice : loadOptions[0]}
-                value={!isServicesDisabled ? serviceChoice : loadOptions[0]}
-                options={servicesOptions}
-                onChange={onChangeService}
-              />
+              {isReady ? (
+                <Select
+                  isMulti
+                  closeMenuOnSelect={false}
+                  isLoading={isServicesLoading}
+                  isDisabled={isServicesDisabled}
+                  isSearchable={true}
+                  className='react-select-container'
+                  classNamePrefix='react-select'
+                  placeholder='Select services'
+                  name='services'
+                  value={serviceChoice}
+                  options={servicesOptions}
+                  onChange={onChangeService}
+                />
+              ) : (
+                <div>Loading...</div> // Show a loading indicator until ready
+              )}
             </div>
             {formik.touched.services && formik.errors.services && (
               <div className='fv-plugins-message-container'>
@@ -497,7 +509,7 @@ function EditProfileModal(props) {
             )}
           </div>
           {/* size */}
-          <div className='row mb-5'>
+          {/* <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>size:</label>
             <div className='col-sm-9'>
               <div className='row'>
@@ -547,7 +559,7 @@ function EditProfileModal(props) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Starting From */}
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>starting from:</label>

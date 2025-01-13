@@ -38,7 +38,7 @@ function BookingTable(props) {
                 {itemDetails.booking_type || '---'}
                 {itemDetails.booked_for && (
                   <div className='col-lg-6 pt-3'>
-                    <Link to={`/users/profile/${itemDetails.booked_for.id}/details`} className='d-flex border p-2'>
+                    <div to={`/users/profile/${itemDetails.booked_for.id}/details`} className='d-flex border p-2'>
                       <div className='symbol symbol-45px me-5'>
                         <img
                           src={itemDetails.booked_for.image || toAbsoluteUrl('/media/avatars/blank.png')}
@@ -57,7 +57,7 @@ function BookingTable(props) {
                           {itemDetails.booked_for.type || '---'}
                         </span>
                       </div>
-                    </Link>
+                    </div>
                   </div>
                 )}
               </td>

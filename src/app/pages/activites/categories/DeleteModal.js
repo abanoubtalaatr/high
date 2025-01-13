@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {Button, Modal} from 'react-bootstrap'
 import { deleteType } from '../../setup-files/_requests'
-import { deleteActivityCategory } from '../_requests'
+import { deleteCategory } from '../_requests'
 
 
 function DeleteModal(props) {
@@ -22,11 +22,12 @@ function DeleteModal(props) {
   useEffect(() => {
     if (confirmDelete) {
       try {
-        deleteActivityCategory(itemId).then((res) => {
+        deleteCategory(itemId).then((res) => {
           setAlertType('success')
           setAlertMessage(res.data.message)
-          setConfirmDelete(false)
-          setShowModal(false)
+          setConfirmDelete(true)
+          setShowModal(true)
+          console.log('here ')
         })
       } catch (err) {
         setAlertType('danger')

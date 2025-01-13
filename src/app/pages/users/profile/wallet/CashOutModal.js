@@ -76,7 +76,7 @@ function CashOutModal(props) {
               </tr>
               <tr>
                 <td>reason:</td>
-                <td className='text-gray-700'>{transactionDetails.fund_reason || '---'}</td>
+                <td className='text-gray-700'>{transactionDetails.action_reason || '---'}</td>
               </tr>
               <tr>
                 <td>action by:</td>

@@ -9,6 +9,7 @@ import PolicyUnitsTable from './PolicyUnitsTable'
 function PolicyUnits() {
   const location = useLocation()
   const propsData = location.state
+  console.log(propsData,'propsData')
   const intl = useIntl()
   const {userId, itemId} = useParams()
   const profilePath = '/partners/profile/' + userId
@@ -107,7 +108,7 @@ function PolicyUnits() {
       <div className='card-header border-0 pt-5 align-items-end'>
         <h5 className='card-title align-items-start flex-column'>
           <span className='mb-3 fw-bolder'>
-            {intl.formatMessage({id: 'UNITS'})} ({propsData.policyName})
+            {intl.formatMessage({id: 'UNITS'})} ({propsData?.policyName})
           </span>
         </h5>
         <div className='card-toolbar'>

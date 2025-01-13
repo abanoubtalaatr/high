@@ -47,6 +47,7 @@ function CommentsPage() {
     buttonId === 'pending'
       ? setClassPendingButton('btn-bg-dark btn-text-white')
       : setClassPendingButton('btn-light')
+      
     setParms({...parms, status: e, page: 1})
   }
   const searchHandler = (e) => {
@@ -106,7 +107,7 @@ function CommentsPage() {
               type='button'
               className={`btn ${classPendingButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('2', 'pending')
+                statusHandler('published', 'pending')
               }}
             >
               published
@@ -115,7 +116,7 @@ function CommentsPage() {
               type='button'
               className={`btn ${classApprovedButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('1', 'approved')
+                statusHandler('deletion', 'approved')
               }}
             >
               deletion request
@@ -124,7 +125,7 @@ function CommentsPage() {
               type='button'
               className={`btn ${classNotApprovedButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('0', 'notapproved')
+                statusHandler('deleted', 'notapproved')
               }}
             >
               deleted
