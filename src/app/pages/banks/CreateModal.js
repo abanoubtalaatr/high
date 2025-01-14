@@ -3,25 +3,19 @@ import * as Yup from 'yup'
 import clsx from 'clsx'
 import {useFormik} from 'formik'
 import {Button, Modal} from 'react-bootstrap'
-import {createCurrency} from '../_requests'
+import {createBank} from './_requests'
 
 function CreateModal(props) {
   const {show, onHide} = props
-  const urlPregExp =
-    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
-  // form validation
+  
   const formSchema = Yup.object().shape({
-    currency_name: Yup.string()
+    name: Yup.string()
       .required('this field is required')
       .min(2, 'Minimum 3 symbols')
       .max(50, 'Maximum 50 symbols'),
-    currency_code: Yup.string()
+    order: Yup.string()
       .required('this field is required')
-      .min(2, 'Minimum 3 symbols')
-      .max(50, 'Maximum 50 symbols'),
-    // currency_API: Yup.string()
-    //   .required('this field is required')
-    //   .matches(urlPregExp, 'URL is not valid'),
+      ,
     active: Yup.string().required('this field is required'),
   })
 
@@ -30,9 +24,9 @@ function CreateModal(props) {
   const [alertType, setAlertType] = useState('success')
 
   const initialValues = {
-    currency_name: '',
-    currency_code: '',
-    // currency_API: '',
+    name: '',
+    order: '',
+    
     active: '',
   }
   const formik = useFormik({
@@ -42,7 +36,7 @@ function CreateModal(props) {
     onSubmit: async (values, {setStatus, resetForm, setFieldValue}) => {
       setLoading(true)
       try {
-        await createCurrency(values.currency_name, values.currency_code, values.active).then((res) => {
+        await createBank(values.name, values.order, values.active).then((res) => {
           setAlertType('success')
           resetForm()
           setStatus(res.data.message)
@@ -66,7 +60,7 @@ function CreateModal(props) {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>create currency</Modal.Title>
+        <Modal.Title>create Bank</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit} encType='multipart/form-data'>
@@ -82,65 +76,43 @@ function CreateModal(props) {
               <input
                 type='text'
                 autoComplete='off'
-                {...formik.getFieldProps('currency_name')}
+                {...formik.getFieldProps('name')}
                 className={clsx('form-control form-control-solid', {
-                  'is-invalid': formik.touched.currency_name && formik.errors.currency_name,
+                  'is-invalid': formik.touched.name && formik.errors.name,
                 })}
-                placeholder='enter currency name'
+                placeholder='Enter bank name'
               />
-              {formik.touched.currency_name && formik.errors.currency_name && (
+              {formik.touched.name && formik.errors.name && (
                 <div className='fv-plugins-message-container'>
                   <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.currency_name}</span>
+                    <span role='alert'>{formik.errors.name}</span>
                   </div>
                 </div>
               )}
             </div>
           </div>
-          {/* currency code */}
+          {/* order */}
           <div className='row mb-5'>
-            <label className='col-sm-3 form-label fw-bold'>code:</label>
+            <label className='col-sm-3 form-label fw-bold'>order:</label>
             <div className='col-sm-9'>
               <input
                 type='text'
                 autoComplete='off'
-                {...formik.getFieldProps('currency_code')}
+                {...formik.getFieldProps('order')}
                 className={clsx('form-control form-control-solid', {
-                  'is-invalid': formik.touched.currency_code && formik.errors.currency_code,
+                  'is-invalid': formik.touched.order && formik.errors.order,
                 })}
-                placeholder='enter currency code'
+                placeholder='Enter bank order'
               />
-              {formik.touched.currency_code && formik.errors.currency_code && (
+              {formik.touched.order && formik.errors.order && (
                 <div className='fv-plugins-message-container'>
                   <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.currency_code}</span>
+                    <span role='alert'>{formik.errors.order}</span>
                   </div>
                 </div>
               )}
             </div>
           </div>
-          {/* currency API */}
-          {/* <div className='row mb-5'>
-            <label className='col-sm-3 form-label fw-bold'>API:</label>
-            <div className='col-sm-9'>
-              <input
-                type='text'
-                autoComplete='off'
-                {...formik.getFieldProps('currency_API')}
-                className={clsx('form-control form-control-solid', {
-                  'is-invalid': formik.touched.currency_API && formik.errors.currency_API,
-                })}
-                placeholder='enter API'
-              />
-              {formik.touched.currency_API && formik.errors.currency_API && (
-                <div className='fv-plugins-message-container'>
-                  <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.currency_API}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div> */}
           {/* status */}
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>status:</label>

@@ -15,7 +15,7 @@ import Dashboard from '../pages/dashboard/Dashboard'
 import Wallet from '../pages/wallet/Wallet'
 import PagesContent from '../pages/pages-content/PagesContent'
 import Financials from '../pages/financials/Financials'
-
+import Banks from '../pages/banks/Banks'
 
 
 const PrivateRoutes = () => {
@@ -40,6 +40,8 @@ const PrivateRoutes = () => {
         <Route path='activites/*' element={<Activites />} />        
         <Route path='pages-content/*' element={<PagesContent />} />
         <Route path='notifications/*' element={<NotificationsPage />} />
+        <Route path='banks/*' element={<Banks />} /> {/* Add this line */}
+
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/error/404' />} />
       </Route>

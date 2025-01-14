@@ -3,22 +3,18 @@ import * as Yup from 'yup'
 import clsx from 'clsx'
 import {useFormik} from 'formik'
 import {Button, Modal} from 'react-bootstrap'
-import {getCurrency, updateCurrency} from '../_requests'
+import {getBank, updateBank} from './_requests'
 
 function EditModal(props) {
   const {show, onHide, itemId} = props
-  const urlPregExp =
-    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
-  // form validation
+  
   const formSchema = Yup.object().shape({
-    currency_name: Yup.string()
+    name: Yup.string()
       .required('this field is required')
-      .min(2, 'Minimum 3 symbols')
-      .max(50, 'Maximum 50 symbols'),
-    currency_code: Yup.string()
+,
+    order: Yup.string()
       .required('this field is required')
-      .min(2, 'Minimum 3 symbols')
-      .max(50, 'Maximum 50 symbols'),
+      ,
     
     active: Yup.string().required('this field is required'),
   })
@@ -30,26 +26,24 @@ function EditModal(props) {
   const [countryErrorMessage, setCountryErrorMessage] = useState('')
   const [alertType, setAlertType] = useState('success')
   const [initialData, setInitialData] = useState({
-    currency_name: '',
-    currency_code: '',
-    // currency_API: '',
+    name: '',
+    order: '',
     active: '',
   })
   useEffect(() => {
     try {
-      getCurrency(itemId).then((res) => {
+      getBank(itemId).then((res) => {
         const newData = res.data.data
-        console.log(newData)
+        
         setInitialData({
-          currency_name: newData.name,
-          currency_code: newData.code,
+          name: newData.name,
+          order: newData.order,
           // currency_API: newData.api,
           active: newData.active,
         })
         setApiRespone(true)
       })
     } catch (err) {
-      setCountryState(true)
       setApiRespone(true)
       setCountryErrorMessage(err.response.data.message)
     }
@@ -63,7 +57,7 @@ function EditModal(props) {
     onSubmit: async (values, {setStatus, resetForm, setFieldValue}) => {
       setLoading(true)
       try {
-        await updateCurrency(values.currency_name, values.currency_code, values.active, itemId).then(
+        await updateBank(values.name, values.order, values.active, itemId).then(
           (res) => {
             setAlertType('success')
             resetForm()
@@ -89,7 +83,7 @@ function EditModal(props) {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>edit currency </Modal.Title>
+        <Modal.Title>Edit Bank </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {!apiRespone ? (
@@ -114,16 +108,16 @@ function EditModal(props) {
                 <input
                   type='text'
                   autoComplete='off'
-                  {...formik.getFieldProps('currency_name')}
+                  {...formik.getFieldProps('name')}
                   className={clsx('form-control form-control-solid', {
-                    'is-invalid': formik.touched.currency_name && formik.errors.currency_name,
+                    'is-invalid': formik.touched.name && formik.errors.name,
                   })}
-                  placeholder='enter currency name'
+                  placeholder='Enter bank name'
                 />
-                {formik.touched.currency_name && formik.errors.currency_name && (
+                {formik.touched.name && formik.errors.name && (
                   <div className='fv-plugins-message-container'>
                     <div className='fv-help-block'>
-                      <span role='alert'>{formik.errors.currency_name}</span>
+                      <span role='alert'>{formik.errors.name}</span>
                     </div>
                   </div>
                 )}
@@ -131,21 +125,21 @@ function EditModal(props) {
             </div>
             {/* currency code */}
             <div className='row mb-5'>
-              <label className='col-sm-3 form-label fw-bold'>code:</label>
+              <label className='col-sm-3 form-label fw-bold'>order:</label>
               <div className='col-sm-9'>
                 <input
                   type='text'
                   autoComplete='off'
-                  {...formik.getFieldProps('currency_code')}
+                  {...formik.getFieldProps('order')}
                   className={clsx('form-control form-control-solid', {
-                    'is-invalid': formik.touched.currency_code && formik.errors.currency_code,
+                    'is-invalid': formik.touched.order && formik.errors.order,
                   })}
-                  placeholder='enter currency code'
+                  placeholder='Enter bank order'
                 />
-                {formik.touched.currency_code && formik.errors.currency_code && (
+                {formik.touched.order && formik.errors.order && (
                   <div className='fv-plugins-message-container'>
                     <div className='fv-help-block'>
-                      <span role='alert'>{formik.errors.currency_code}</span>
+                      <span role='alert'>{formik.errors.order}</span>
                     </div>
                   </div>
                 )}
