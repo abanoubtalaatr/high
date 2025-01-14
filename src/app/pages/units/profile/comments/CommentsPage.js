@@ -116,7 +116,7 @@ function CommentsPage() {
               type='button'
               className={`btn ${classApprovedButton} btn-sm`}
               onClick={(s) => {
-                statusHandler('deletion', 'approved')
+                statusHandler('deletion_request', 'approved')
               }}
             >
               deletion request

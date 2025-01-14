@@ -56,7 +56,7 @@ function InformationTable(props) {
               <td className='text-gray-700 fw-bolder'>
                 <span className=' text-gray-700 fw-bolder d-flex'>
                   <KTIcon iconName='information' className='fs-3 me-1' />
-                  Price of the session is not used in public event.
+                  {itemDetails?.total_income_from_event || '---'}
                 </span>
               </td>
             </tr>

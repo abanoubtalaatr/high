@@ -2,7 +2,7 @@ import {KTIcon, KTSVG} from '../../../../_metronic/helpers'
 
 function PaymentTable(props) {
   const {title, itemDetails} = props
-
+console.log(itemDetails,'details')
   return (
     <>
       <h5 className='card-title mt-5'>
@@ -150,27 +150,27 @@ function PaymentTable(props) {
                 <tbody>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>0.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.discount} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.total_income_from_event || '0'} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax (5%) :</td>
-                    <td className='text-gray-700'>4.76 SAR</td>
+                    <td>Tax ({itemDetails?.playerPricingData?.pricing?.tax_percent || '0'} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.tax || '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>100.00 SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.playerPricingData?.price_after_discount} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}
@@ -254,31 +254,31 @@ function PaymentTable(props) {
                 <tbody>
                   <tr>
                     <td>Total Number of Players :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.player_numbers}</td>
                   </tr>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.base_price|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>0.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.discount|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.total_income_from_event|| '0'} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax (5%) :</td>
-                    <td className='text-gray-700'>4.76 SAR</td>
+                    <td>Tax ({itemDetails?.pricing?.joinedPlayersPricingData?.discount_percent|| '0'} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.tax|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>100.00 SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.joinedPlayersPricingData?.total_price|| '0'} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}
@@ -310,15 +310,15 @@ function PaymentTable(props) {
                 <tbody>
                   <tr>
                     <td>Total Number of left players with fee :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.late_left_players_count} </td>
                   </tr>
                   <tr>
                     <td>Fee Price per player :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
@@ -366,39 +366,39 @@ function PaymentTable(props) {
                 <tbody>
                   <tr>
                     <td>Total Number of Players :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.player_numbers}</td>
                   </tr>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Total Number of left players with fee :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.late_left_players_count} SAR</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>Fee Price per player :</td>
-                    <td className='text-gray-700'>100.00 SAR</td>
-                  </tr>
+                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
+                  </tr> */}
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>0.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.discount} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.total_price} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax (5%) :</td>
-                    <td className='text-gray-700'>4.76 SAR</td>
+                    <td>Tax ({itemDetails?.eventPricingData?.discount_percent} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.tax} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>100.00 SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.eventPricingData?.total_price} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}

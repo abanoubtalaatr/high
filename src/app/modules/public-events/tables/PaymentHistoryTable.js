@@ -24,7 +24,7 @@ function PaymentHistoryTable(props) {
             {itemDetails.transactions.map((e) => {
               return (
                 <tr key={e.id}>
-                  <td>player name</td>
+                  <td>{e?.name}</td>
                   <td className='text-center'>online</td>
                   <td>
                     {e.amount || '0'} <span className='fs-8'>SAR</span>
