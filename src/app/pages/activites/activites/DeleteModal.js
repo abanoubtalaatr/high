@@ -24,12 +24,18 @@ function DeleteModal(props) {
     if (confirmDelete) {
       try {
         deleteActivityCategory(itemId, activityCategoryId).then((res) => {
-          setAlertType('success')
-          setAlertMessage(res.data.message)
-          setConfirmDelete(false)
-          setShowModal(false)
-          onHide(true)
-          window.location.reload()
+          
+          if(res.data.succcess){
+            setAlertType('success')
+            setAlertMessage(res.data.message)
+            setConfirmDelete(false)
+            setShowModal(false)
+            onHide(true)
+          }else{
+            setAlertType('danger')
+        setAlertMessage(res.data.message)
+          }
+          // window.location.reload()
         })
       } catch (err) {
         setAlertType('danger')

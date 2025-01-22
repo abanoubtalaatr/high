@@ -11,21 +11,29 @@ function DeleteModal(props) {
 
   const confirmHandler = () => {
     setConfirmDelete(true)
+    console.log('hadder')
   }
   useEffect(() => {
     if (confirmDelete) {
+      console.log('hadder')
       setLoading(true)
       try {
         deleteService(itemId).then((res) => {
-          setAlertType('success')
-          // setAlertMessage(res.data.message)
-          setConfirmDelete(false)
-          setLoading(false)
-          onComplete(false)
+          if (res.data.success) {
+            setAlertType('success')
+            setAlertMessage(res.data.message)
+            setConfirmDelete(false)
+            setLoading(false)
+            onComplete(false)
+          } else {
+            setAlertType('danger')
+            setAlertMessage(res.data.message)
+            setLoading(false)
+          }
         })
       } catch (err) {
         setAlertType('danger')
-        setAlertMessage(err.response.data.message)
+        // setAlertMessage(err.response.data.message)
         setLoading(false)
       }
     }
@@ -44,7 +52,7 @@ function DeleteModal(props) {
         Please confirm that you want to delete this service
       </Modal.Body>
       <Modal.Footer>
-      <button type='button' className='btn btn-light mt-5 mb-5' onClick={onHide}>
+        <button type='button' className='btn btn-light mt-5 mb-5' onClick={onHide}>
           cancel
         </button>
         <button

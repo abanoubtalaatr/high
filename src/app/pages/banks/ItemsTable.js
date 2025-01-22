@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 function ItemsTable(props) {
   const { items, selectedCurrency } = props
+  console.log(items, 'itesm from')
   const [itemID, setItemId] = useState('')
   const [showEditModal, setShowEditModal] = useState(false)
 

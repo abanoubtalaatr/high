@@ -65,12 +65,14 @@ function BanksItemsTableWrapper(props) {
       .then((res) => {
         const data = res.data.data
         setItems(data)
+      
         setIsLoaded(false)
-        stopRefresh(true)
-        setTotalRecord(res.data.total)
+        // stopRefresh(true)
+        setTotalRecord(res.data.data.total)
+        console.log(res.data.data.total,'total')
       })
       .catch((err) => {
-        setErrorMessage(err.response.data.message)
+        // setErrorMessage(err.response.data.message)
         setIsLoaded(false)
       })
    
@@ -78,11 +80,9 @@ function BanksItemsTableWrapper(props) {
 
 
   useEffect(() => {
-    if (refreshTable) {
-      setIsLoaded(true)
-      getJobsHandler()
-    }
-  }, [refreshTable])
+    console.log('enter')
+    getJobsHandler()
+  }, [])
 
   return (
     <>

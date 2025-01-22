@@ -35,14 +35,14 @@ function Banks() {
             </>
           }
         />
-        {/* <Route
+        <Route
           path='Banks/list'
           element={
             <>
               <BanksItemsTableWrapper />
             </>
           }
-        /> */}
+        />
 
         <Route index element={<Navigate to='/Banks/list' />} />
       </Route>

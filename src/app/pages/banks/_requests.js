@@ -39,7 +39,7 @@ export function updateBank(name, order, active, itemId) {
     BANK_URL + '/' + itemId,
     {
       name: name,
-      code: order,
+      order: order,
       active: active,
     
     }

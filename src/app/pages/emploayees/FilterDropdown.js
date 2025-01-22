@@ -55,7 +55,7 @@ export function FilterDropdown({ onApplyFilters }) {
 
   const applyHandler = () => {
     const status = (statusChoice.value === 'all' || statusChoice.value === 'All') ? '' : statusChoice.value;
-
+    
     onApplyFilters({
       country: countryChoice.value, // Send the country ISO code
       job_id: jobChoice.value, // Send the job ID
@@ -63,6 +63,10 @@ export function FilterDropdown({ onApplyFilters }) {
     });
   };
 
+  const resetHandler = () => {
+    setCountryChoice('')
+    setJobChoice('')
+  }
   return (
     <div className='menu menu-sub menu-sub-dropdown w-250px w-md-300px' data-kt-menu='true'>
       <div className='px-7 py-5'>
@@ -104,6 +108,9 @@ export function FilterDropdown({ onApplyFilters }) {
             type='reset'
             className='btn btn-sm btn-light btn-active-light-primary me-2'
             data-kt-menu-dismiss='true'
+            // onClick={applyHandler('reset')}
+            onClick={resetHandler}
+
           >
             Reset
           </button>

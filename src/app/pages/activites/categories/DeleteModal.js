@@ -27,7 +27,15 @@ function DeleteModal(props) {
           setAlertMessage(res.data.message)
           setConfirmDelete(true)
           setShowModal(true)
-          console.log('here ')
+          if (res.data.success) {
+            setAlertType('success')
+          setAlertMessage(res.data.message)
+          setConfirmDelete(true)
+          setShowModal(true)
+}else{
+setAlertType('danger')
+        setAlertMessage(res.data.message)
+}
         })
       } catch (err) {
         setAlertType('danger')

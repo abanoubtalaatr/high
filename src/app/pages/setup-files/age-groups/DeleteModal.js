@@ -17,11 +17,18 @@ function DeleteModal(props) {
       setLoading(true)
       try {
         deleteAgeGroup(itemId).then((res) => {
-          setAlertType('success')
-          // setAlertMessage(res.data.message)
-          setConfirmDelete(false)
-          setLoading(false)
-          onComplete(false)
+          if (res.data.success) {
+            setAlertType('success')
+            setAlertMessage(res.data.message)
+            setConfirmDelete(false)
+            setLoading(false)
+            onComplete(false)
+          } else {
+            setAlertType('danger')
+            setAlertMessage(res.data.message)
+            setLoading(false)
+          }
+          
         })
       } catch (err) {
         setAlertType('danger')
