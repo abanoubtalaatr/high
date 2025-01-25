@@ -73,6 +73,7 @@ function EditLocationModal(props) {
   const [countryIso, setCountryIso] = useState(
     locationDetails.country ? locationDetails.country.iso : ''
   )
+  useEffect(() => {}, [loadMap,countryIso])
   const [cityPlaceId, setCityPlaceId] = useState(
     locationDetails.city ? locationDetails.city.place_id : ''
   )
@@ -84,8 +85,8 @@ function EditLocationModal(props) {
       formik.setFieldValue('latitude', result.location.lat())
       formik.setFieldValue('longitude', result.location.lng())
     } else {
-      setGoogleMapDetails(false)
-      setAlertText('The selected address is not within the city')
+      // setGoogleMapDetails(false)
+      // setAlertText('The selected address is not within the city')
     }
   }
   const locationHandler = () => {
@@ -353,7 +354,8 @@ function EditLocationModal(props) {
           setLoading(false)
         }
       } else {
-        if (googleMapDetails) {
+        
+        // if (googleMapDetails) {
           try {
             await updateLocation(values, unitId).then((res) => {
               setAlertType('success')
@@ -369,9 +371,9 @@ function EditLocationModal(props) {
             setAlertText(error.response.data.message)
             setLoading(false)
           }
-        } else {
-          setAlertText('The selected address is not within the city')
-        }
+        // } else {
+        //   // setAlertText('The selected address is not within the city')
+        // }
       }
       setLoading(true)
       // try {
@@ -568,7 +570,7 @@ function EditLocationModal(props) {
               <label className='col-sm-3 form-label fw-bold'>map:</label>
               <div className='col-12'>
                 <div className='w-100 h-300px'>
-                  {loadMap ? (
+                  
                     <AddressSearchMap
                       center={mapCenter}
                       mapResult={mapResult}
@@ -576,9 +578,7 @@ function EditLocationModal(props) {
                       cityPlaceId={cityPlaceId}
                       
                     />
-                  ) : (
-                    loadMapMessage
-                  )}
+                 
                 </div>
                 {formik.touched.address && formik.errors.address && (
                   <div className='fv-plugins-message-container'>

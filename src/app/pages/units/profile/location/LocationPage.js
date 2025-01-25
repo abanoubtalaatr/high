@@ -28,6 +28,7 @@ function LocationPage() {
     setonComplete(true)
   }
   useEffect(() => {
+    
     getLocation(unitId)
       .then((res) => {
         setLocationDetails(res.data.data)
