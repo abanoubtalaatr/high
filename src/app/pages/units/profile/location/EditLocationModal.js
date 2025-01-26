@@ -407,6 +407,12 @@ function EditLocationModal(props) {
           )}
 
           {/* type */}
+        <div className='fs-6 text-gray-700 mb-10'>
+        
+  إذا كانت المدينة علي سبيل المثال الرياض وقمت بتغيير الموقع إلى مدينة أخرى، فلن يتم تحديث الإحداثيات.
+
+        </div>
+
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>type:</label>
             <div className='col-sm-9'>

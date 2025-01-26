@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {KTIcon} from '../../../../_metronic/helpers'
-import {getCapacities} from '../_requests'
+import {getCapacities,getAllCapacities} from '../_requests'
 import ItemsTable from './ItemsTable'
 import Pagination from '../../../components/pagination/Pagination'
 import Spinner from '../../../components/spinner/Spinner'
@@ -46,7 +46,7 @@ function ItemsTableWrapper(props) {
     startRefreshTable(true)
   }
   const getitemssHandler = () => {
-    getCapacities(parms)
+    getAllCapacities(parms)
       .then((res) => {
         setItems(res.data.data)
         setTotalRecord(res.data.total)

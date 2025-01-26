@@ -5,6 +5,7 @@ export const GENERAL_TYPES_URL = `${API_URL}/types`
 export const TYPES_URL = `${API_URL}/types`
 export const CAPACITIES_URL = `${API_URL}/capacities`
 export const GENERAL_CAPACITIES_URL = `${API_URL}/general/capacities`
+
 export const SERVICES_URL = `${API_URL}/services`
 export const GENERAL__SERVICES_URL = `${API_URL}/services`
 export const AGE_GROUPS_URL = `${API_URL}/age-groups`
@@ -68,6 +69,12 @@ export function deleteAgeGroup(itemId) {
 export function getCapacities(props) {
   
   return axios.get(GENERAL_CAPACITIES_URL, {
+    params: props,
+  })
+}
+export function getAllCapacities(props) {
+  
+  return axios.get(CAPACITIES_URL, {
     params: props,
   })
 }

@@ -26,6 +26,9 @@ export function getUsersNotifications(props) {
     params: props,
   })
 }
+export function getUsersDetailsNotification(id) {
+  return axios.get(USER_NOTIFICATIONS_URL+'/'+id)
+}
 export function getPartnerNotification(itemId) {
   return axios.get(PARTNER_NOTIFICATIONS_URL + '/' + itemId)
 }

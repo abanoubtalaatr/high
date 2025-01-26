@@ -12,6 +12,7 @@ import CreateUserToolbarWrapper from './users/CreateUserToolbarWrapper'
 import CreatePartnerNotification from './partners/CreatePartnerNotification'
 import EditPartnerNotification from './partners/EditPartnerNotification'
 import EditToolbarWrapper from './partners/EditToolbarWrapper'
+import EditUserNotification from './users/EditUserNotification'
 
 function NotificationsPage() {
   const intl = useIntl()
@@ -98,15 +99,15 @@ function NotificationsPage() {
             </>
           }
         />
-         <Route
-          path='/users/edit:itemId'
-          element={
-            <>
-              <CreateUserToolbarWrapper />
-              <CreateUserNotification />
-            </>
-          }
-        />
+        <Route
+  path='/users/edit/:itemId'
+  element={
+    <>
+      <EditUserNotification />
+    </>
+  }
+/>
+
         <Route index element={<Navigate to='/notifications/partners' />} />
       </Route>
     </Routes>

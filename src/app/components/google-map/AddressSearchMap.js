@@ -1,14 +1,14 @@
-import { memo, useCallback, useRef, useState } from 'react'
-import { GoogleMap, Marker, Autocomplete, LoadScript } from '@react-google-maps/api'
+import {memo, useCallback, useRef, useState} from 'react'
+import {GoogleMap, Marker, Autocomplete, LoadScript} from '@react-google-maps/api'
 
 const libraries = ['places']
 
 function AddressSearchMap(props) {
-  const { center, countryIso, cityPlaceId, mapResult } = props
+  const {center, countryIso, cityPlaceId, mapResult} = props
   const [mapCenter, setMapCenter] = useState(center)
   const [mapZoom, setMapZoom] = useState(1)
   const [mapMarkerShow, setMapMarkerShow] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)  
+  const [isLoading, setIsLoading] = useState(false)
   const mapRef = useRef()
   const autocompleteRef = useRef()
 
@@ -35,7 +35,7 @@ function AddressSearchMap(props) {
 
   const autocompleteOption = {
     types: ['establishment'],
-    componentRestrictions: { country: countryIso },
+    componentRestrictions: {country: countryIso},
   }
 
   const onLoadMap = useCallback((map) => {
@@ -51,7 +51,7 @@ function AddressSearchMap(props) {
 
   const handlePlaceChanged = () => {
     const place = autocompleteRef.current.getPlace()
-    const { geometry } = place
+    const {geometry} = place
     if (geometry) {
       const bounds = new window.google.maps.LatLngBounds()
       if (geometry.viewport) {
@@ -67,13 +67,18 @@ function AddressSearchMap(props) {
   }
 
   const onMarkerDragEnd = (coord) => {
-    const { latLng } = coord
-    checkCityInState(latLng, cityPlaceId)
+    const {latLng} = coord
+    const newCenter = {
+      lat: latLng.lat(),
+      lng: latLng.lng(),
+    }
+    setMapCenter(newCenter) // Update the marker's position
+    checkCityInState(latLng, cityPlaceId) // Validate the new location
   }
 
   const checkCityInState = (geometry, cityPlaceId) => {
     const geocoder = new window.google.maps.Geocoder()
-    geocoder.geocode({ location: geometry }, (results, status) => {
+    geocoder.geocode({location: geometry}, (results, status) => {
       if (status === 'OK') {
         const cr = results.filter((c) => c.types[0] === 'plus_code')
         const res = results.filter((e) => e.place_id === cityPlaceId)
@@ -92,26 +97,23 @@ function AddressSearchMap(props) {
   }
 
   return (
-    
-      <div style={{ position: 'relative', height: '100%' }}>
-        
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={mapCenter}
-          zoom={mapZoom}
-          options={options}
-          onLoad={onLoadMap}
-        >
-          {mapMarkerShow && (
-            <Marker
-              position={mapCenter}
-              draggable={true}
-              onDragEnd={(coord) => onMarkerDragEnd(coord)}
-            />
-          )}
-        </GoogleMap>
-      </div>
-    
+    <div style={{position: 'relative', height: '100%'}}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={mapCenter} // This ensures the map centers at the updated location
+        zoom={mapZoom}
+        options={options}
+        onLoad={onLoadMap}
+      >
+        {mapMarkerShow && (
+          <Marker
+            position={mapCenter} // Marker will follow the updated mapCenter
+            draggable={true}
+            onDragEnd={(coord) => onMarkerDragEnd(coord)}
+          />
+        )}
+      </GoogleMap>
+    </div>
   )
 }
 
