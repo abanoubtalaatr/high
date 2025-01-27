@@ -1,17 +1,18 @@
 // import CreateEmployeeModal from './CreateEmployeeModal'
 
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useIntl } from 'react-intl'
-import { useFormik } from 'formik'
+import {KTIcon} from '../../../../_metronic/helpers'
+import {useIntl} from 'react-intl'
+import {useFormik} from 'formik'
 import * as Yup from 'yup'
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker'
 import clsx from 'clsx'
 import Select from 'react-select'
-import { Link, useNavigate , useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {
   getUsersDetailsNotification,
   getAgeGroups,
+  updateUserNotification,
   getCities,
   getCountries,
   getGpsCities,
@@ -37,8 +38,8 @@ function EditUserNotification() {
       .min(3, 'Minimum 3 symbols')
       .max(200, 'Maximum 50 symbols'),
   })
-  const DefOptions = [{ value: 'all', label: 'all' }]
-  const loadOptions = [{ value: '', label: 'loading ...' }]
+  const DefOptions = [{value: 'all', label: 'all'}]
+  const loadOptions = [{value: '', label: 'loading ...'}]
   const [isCountriesLoading, setIsCountriesLoading] = useState(false)
   const [isCountriesDisabled, setIsCountriesDisabled] = useState(false)
   const [isGpsCountriesLoading, setIsGpsCountriesLoading] = useState(false)
@@ -74,10 +75,10 @@ function EditUserNotification() {
   const [ageGroupChoice, setAgeGroupChoice] = useState(ageGroupsOptions[0])
   const [profileSettingsDisabled, setProfileSettingsDisabled] = useState(true)
   const [alertMessage, setAlertMessage] = useState('')
-  
+
   const {itemId} = useParams()
   const genderOptions = [
-    { value: 'all', label: 'all' },
+    {value: 'all', label: 'all'},
     {
       value: 'male',
       label: 'male',
@@ -92,7 +93,7 @@ function EditUserNotification() {
     },
   ]
   const activityStatusOptions = [
-    { value: 'all', label: 'all' },
+    {value: 'all', label: 'all'},
     {
       value: 'active',
       label: 'active',
@@ -107,7 +108,7 @@ function EditUserNotification() {
     },
   ]
   const ageOptions = [
-    { value: 'all', label: 'all' },
+    {value: 'all', label: 'all'},
     {
       value: 'age_group',
       label: 'specific age group',
@@ -118,20 +119,20 @@ function EditUserNotification() {
     },
   ]
   const initialValues = {
-    title: "title",
-    body: "body",
-    timing: "now", // now,scheduled
-    sending_date: "",
-    user_type: "registered", // all, registered, guest
-    activity_status: "all", // all, very_active, active, inactive
-    location_type: "phone_country", // phone_country, gps_location_location
-    country_iso: "-1",
-    state: "all", // default: all
-    city: "all", // default: all
-    gender: "all", // all, male, female, undetermined
-    age: "all", // all, age_group, undetermined
+    title: 'title',
+    body: 'body',
+    timing: 'now', // now,scheduled
+    sending_date: '',
+    user_type: 'registered', // all, registered, guest
+    activity_status: 'all', // all, very_active, active, inactive
+    location_type: 'phone_country', // phone_country, gps_location_location
+    country_iso: '-1',
+    state: 'all', // default: all
+    city: 'all', // default: all
+    gender: 'all', // all, male, female, undetermined
+    age: 'all', // all, age_group, undetermined
     // age_group_id: '', // required if age = age_group
-    app_lang: "ar"
+    app_lang: 'ar',
   }
   // format datetime
   const dateTimeFormatHandler = (date) => {
@@ -158,16 +159,24 @@ function EditUserNotification() {
   // on change user type settings
   const onChangeUserType = (e) => {
     setUserTypeChoice(e.target.value)
-    if (e.target.value === 'guest' || e.target.value === 'all') { setLocationTypeChoice('gps_location') }
-    e.target.value === 'guest' || e.target.value === 'all' ? setPhoneCountryDisabled(true) : setPhoneCountryDisabled(false)
-    e.target.value === 'registered' ? setProfileSettingsDisabled(true) : setProfileSettingsDisabled(false)
+    if (e.target.value === 'guest' || e.target.value === 'all') {
+      setLocationTypeChoice('gps_location')
+    }
+    e.target.value === 'guest' || e.target.value === 'all'
+      ? setPhoneCountryDisabled(true)
+      : setPhoneCountryDisabled(false)
+    e.target.value === 'registered'
+      ? setProfileSettingsDisabled(true)
+      : setProfileSettingsDisabled(false)
     formik.setFieldValue('usertype', e.target.value)
   }
   // on change location settings
   const onChangeLocationType = (e) => {
     setLocationTypeChoice(e.target.value)
     formik.setFieldValue('locationtype', e.target.value)
-    e.target.value === 'phone_country' ? setProfileSettingsDisabled(true) : setProfileSettingsDisabled(false)
+    e.target.value === 'phone_country'
+      ? setProfileSettingsDisabled(true)
+      : setProfileSettingsDisabled(false)
   }
   const countriesOptionsHandler = () => {
     const newCountriesOptions = [...DefOptions, ...countriesOptions]
@@ -344,17 +353,45 @@ function EditUserNotification() {
         setIsLanguagesLoading(false)
         setIsLanguagesDisabled(false)
       })
-      getUsersDetailsNotification(itemId).then((res) => {
-        formik.setValues({
-          title: res.data.data.title,
-          body : res.data.data.body,
-        })
-        setTimingChoice(res.data.data.timing)
-        setUserTypeChoice(res.data.data.user_type)
-          setActivityStatusChoice(res.data.data.activity_status)
-          console.log(activityStatusChoice,'activityStatusChoice')
-        console.log(res.data.data, 'res')
-      });
+   getUsersDetailsNotification(itemId).then((res) => {
+  formik.setValues({
+    title: res.data.data.title,
+    body: res.data.data.body,
+    timing: res.data.data.timing,
+    user_type: res.data.data.user_type,
+    activity_status: res.data.data.activity_status == 'All' ? 'all' : res.data.data.activity_status,
+    app_lang: res.data.data?.app_lang,
+    location_type: res.data.data.location_type,
+    age: res.data.data.age,
+    gender: res.data.data.gender,
+    country_iso : res.data.data?.country_iso?.iso,
+  });
+  setTimingChoice(res.data.data.timing);
+  setUserTypeChoice(res.data.data.user_type);
+  setActivityStatusChoice({
+    label: res.data.data.activity_status,
+    value: res.data.data.activity_status,
+  });
+  setGpsCountryChoice({
+    value: res.data.data?.country_iso?.iso,
+    label: res.data.data?.country_iso?.name,
+  });
+  setLocationTypeChoice(res.data.data.location_type);
+  setGenderChoice({
+    label: res.data.data.gender,
+    value: res.data.data.gender,
+  })
+  setAgeGroupChoice({
+    label : res.data.data.age,
+    value : res.data.data.age,
+  })
+  setLangsChoice({
+    label : res.data.data.app_lang,
+    value : res.data.data.app_lang,
+  })
+  console.log(res.data.data, 'res')
+});
+
   }, [])
 
   useEffect(() => {
@@ -368,21 +405,21 @@ function EditUserNotification() {
     initialValues,
     enableReinitialize: true,
     validationSchema: formSchema,
-    onSubmit: async (values, { resetForm, setFieldValue }) => {
+    onSubmit: async (values, {resetForm, setFieldValue}) => {
       setLoading(true)
-      // try {
-      //   await createUserNotification(values).then((res) => {
-      //     resetForm()
-      //     setAlertType('success')
-      //     setAlertMessage(res.data.message)
-      //     setLoading(false)
-      //     navigate('/notifications/users')
-      //   })
-      // } catch (error) {
-      //   setAlertType('danger')
-      //   setAlertMessage(error.response.data.message)
-      //   setLoading(false)
-      // }
+      try {
+        await updateUserNotification(itemId,values).then((res) => {
+          resetForm()
+          setAlertType('success')
+          setAlertMessage(res.data.message)
+          setLoading(false)
+          navigate('/notifications/users')
+        })
+      } catch (error) {
+        setAlertType('danger')
+        setAlertMessage(error.response.data.message)
+        setLoading(false)
+      }
     },
   })
   return (
@@ -573,7 +610,7 @@ function EditUserNotification() {
               </div>
             </div>
           )}
-          < h5 className='card-title align-items-start flex-column mb-5'>
+          <h5 className='card-title align-items-start flex-column mb-5'>
             <span className='mb-3 fw-bolder'>location settings</span>
           </h5>
           {/* location type */}
@@ -677,97 +714,102 @@ function EditUserNotification() {
               <div className='row mb-5'>
                 <label className='col-md-3 form-label fw-bold'></label>
                 <div className='col-md-9'>
-                  <div className="form-check form-check-custom form-check-solid">
-                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                  <div className='form-check form-check-custom form-check-solid'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      value=''
+                      id='flexCheckDefault'
+                    />
+                    <label className='form-check-label' htmlFor='flexCheckDefault'>
                       include all users with undetermined gps_location location.
                     </label>
                   </div>
                 </div>
               </div>
             </>
-          ) :
-            (
-              < div className='row mb-5'>
-                <label className='col-md-3 form-label fw-bold'>country:</label>
-                <div className='col-md-4'>
-                  <Select
-                    isLoading={isCountriesLoading}
-                    isDisabled={isCountriesDisabled}
-                    isSearchable={true}
-                    className='react-select-container'
-                    classNamePrefix='react-select'
-                    placeholder='select country'
-                    name='country_iso'
-                    defaultValue={!isCountriesDisabled ? countryChoice : loadOptions[0]}
-                    value={!isCountriesDisabled ? countryChoice : loadOptions[0]}
-                    options={countriesOptions}
-                    onChange={onChangeCountry}
-                  />
-                </div>
-              </div>
-            )
-          }
-          {profileSettingsDisabled && (<>
-            <h5 className='card-title align-items-start flex-column mb-5'>
-              <span className='mb-3 fw-bolder'>profile settings</span>
-            </h5>
-            {/* gender */}
+          ) : (
             <div className='row mb-5'>
-              <label className='col-md-3 form-label fw-bold'>gender:</label>
+              <label className='col-md-3 form-label fw-bold'>country:</label>
               <div className='col-md-4'>
                 <Select
+                  isLoading={isCountriesLoading}
+                  isDisabled={isCountriesDisabled}
                   isSearchable={true}
                   className='react-select-container'
                   classNamePrefix='react-select'
-                  placeholder='select gender'
-                  name='gender'
-                  defaultValue={genderChoice}
-                  value={genderChoice}
-                  options={genderOptions}
-                  onChange={onGenderChange}
+                  placeholder='select country'
+                  name='country_iso'
+                  defaultValue={!isCountriesDisabled ? countryChoice : loadOptions[0]}
+                  value={!isCountriesDisabled ? countryChoice : loadOptions[0]}
+                  options={countriesOptions}
+                  onChange={onChangeCountry}
                 />
               </div>
             </div>
-            {/* age */}
-            <div className='row mb-5'>
-              <label className='col-md-3 form-label fw-bold'>age:</label>
-              <div className='col-md-4'>
-                <Select
-                  isSearchable={true}
-                  className='react-select-container'
-                  classNamePrefix='react-select'
-                  placeholder='select gender'
-                  name='age'
-                  defaultValue={ageChoice}
-                  value={ageChoice}
-                  options={ageOptions}
-                  onChange={onAgeChange}
-                />
-              </div>
-            </div>
-            {/* age group */}
-            {ageGroupsDisabled && (
+          )}
+          {profileSettingsDisabled && (
+            <>
+              <h5 className='card-title align-items-start flex-column mb-5'>
+                <span className='mb-3 fw-bolder'>profile settings</span>
+              </h5>
+              {/* gender */}
               <div className='row mb-5'>
-                <label className='col-md-3 form-label fw-bold'></label>
+                <label className='col-md-3 form-label fw-bold'>gender:</label>
                 <div className='col-md-4'>
                   <Select
-                    isLoading={isAgeGroupsLoading}
-                    isDisabled={isAgeGroupsDisabled}
                     isSearchable={true}
                     className='react-select-container'
                     classNamePrefix='react-select'
-                    placeholder='select age group'
-                    name='age_group_id'
-                    defaultValue={ageGroupChoice}
-                    value={ageGroupChoice}
-                    options={ageGroupsOptions}
-                    onChange={onAgeGroupChange}
+                    placeholder='select gender'
+                    name='gender'
+                    defaultValue={genderChoice}
+                    value={genderChoice}
+                    options={genderOptions}
+                    onChange={onGenderChange}
                   />
                 </div>
               </div>
-            )}
-          </>)}
+              {/* age */}
+              <div className='row mb-5'>
+                <label className='col-md-3 form-label fw-bold'>age:</label>
+                <div className='col-md-4'>
+                  <Select
+                    isSearchable={true}
+                    className='react-select-container'
+                    classNamePrefix='react-select'
+                    placeholder='select gender'
+                    name='age'
+                    defaultValue={ageChoice}
+                    value={ageChoice}
+                    options={ageOptions}
+                    onChange={onAgeChange}
+                  />
+                </div>
+              </div>
+              {/* age group */}
+              {ageGroupsDisabled && (
+                <div className='row mb-5'>
+                  <label className='col-md-3 form-label fw-bold'></label>
+                  <div className='col-md-4'>
+                    <Select
+                      isLoading={isAgeGroupsLoading}
+                      isDisabled={isAgeGroupsDisabled}
+                      isSearchable={true}
+                      className='react-select-container'
+                      classNamePrefix='react-select'
+                      placeholder='select age group'
+                      name='age_group_id'
+                      defaultValue={ageGroupChoice}
+                      value={ageGroupChoice}
+                      options={ageGroupsOptions}
+                      onChange={onAgeGroupChange}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
           <h5 className='card-title align-items-start flex-column mb-5'>
             <span className='mb-3 fw-bolder'>app language settings</span>
           </h5>
@@ -809,7 +851,7 @@ function EditUserNotification() {
           {/* end card-footer */}
         </div>
       </div>
-    </form >
+    </form>
   )
 }
 

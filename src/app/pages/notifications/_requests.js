@@ -41,6 +41,9 @@ export function createPartnerNotification(values) {
 export function createUserNotification(values) {
   return axios.post(USER_NOTIFICATIONS_URL, { ...values })
 }
+export function updateUserNotification(id, values) {
+  return axios.put(USER_NOTIFICATIONS_URL+'/'+id, { ...values })
+}
 export function updatePartnerNotification(values, itemId) {
   let activitiesIds = Array.isArray(values.activities)
     ? values.activities.map((s) => s.value)
