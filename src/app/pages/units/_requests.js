@@ -78,6 +78,7 @@ export function updateLocation(values, itemId) {
     type: values.type,
     latitude: values.latitude,
     longitude: values.longitude,
+    
   }
   values.conflicted_with.forEach((c) => {
     v[`conflicted_fields[${c}]`] = [c]
