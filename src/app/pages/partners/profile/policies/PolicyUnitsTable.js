@@ -18,7 +18,7 @@ function PolicyUnitsTable(props) {
             <th className='min-w-100px text-center'>booking methodology</th>
             <th className='min-w-100px text-center'>availability</th>
             <th className='min-w-100px text-center'>status</th>
-            <th className='min-w-100px text-center'>Actions</th>
+            {/* <th className='min-w-100px text-center'>Actions</th> */}
           </tr>
         </thead>
         {/* end::Table head */}
@@ -64,14 +64,14 @@ function PolicyUnitsTable(props) {
                     {e.status && e.status.lable}
                   </span>
                 </td>
-                <td className='text-center'>
+                {/* <td className='text-center'>
                   <Link
                     to='#'
                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                   >
                     <KTIcon iconName='eye' className='fs-3' />
                   </Link>
-                </td>
+                </td> */}
               </tr>
             )
           })}

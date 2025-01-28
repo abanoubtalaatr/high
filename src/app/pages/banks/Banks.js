@@ -1,8 +1,10 @@
 import { useIntl } from 'react-intl';
 import { PageTitle } from '../../../_metronic/layout/core';
-import { Route, Routes, Outlet, Navigate } from 'react-router-dom';
+import { Route, Routes, Outlet, Navigate, useParams } from 'react-router-dom';
 import BanksPageToolbarWrapper from './BanksPageToolbarWrapper';
 import BanksItemsTableWrapper from './BanksItemsTableWrapper';
+// import BankTranslationWrapper from './BankTranslationWrapper'; // New Component
+import Translation from '../../modules/translations/Translation';
 
 function Banks() {
   const intl = useIntl();
@@ -32,6 +34,7 @@ function Banks() {
       <PageTitle breadcrumbs={breadCrumbs}>Banks</PageTitle>
       <Routes>
         <Route element={<Outlet />}>
+          {/* Main List Route */}
           <Route
             path='list'
             element={
@@ -41,6 +44,17 @@ function Banks() {
               </>
             }
           />
+          {/* Translation Route */}
+          
+          <Route
+          path='list/:itemId/translation'
+          element={
+            <>
+              <Translation modelName={'bank'} model={'banks'} />
+            </>
+          }
+        />
+          {/* Default Redirect */}
           <Route index element={<Navigate to='/banks/list' />} />
         </Route>
       </Routes>

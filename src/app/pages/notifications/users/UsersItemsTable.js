@@ -71,18 +71,23 @@ function UsersItemsTable(props) {
                       <small>{e.sending_date || '---'}</small>
                     </td>
                     <td className='text-center'>
-                      <Link
-                        to={`/notifications/users/edit/${e.id}`}
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
-                      >
-                        <KTIcon iconName='pencil' className='fs-3' />
-                      </Link>
-                      <button
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                        onClick={() => openDeleteModal(e.id)}
-                      >
-                        <KTIcon iconName='trash' className='fs-3' />
-                      </button>
+                    {e.status !== 'sent' && (
+  <>
+    <Link
+      to={`/notifications/users/edit/${e.id}`}
+      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3'
+    >
+      <KTIcon iconName='pencil' className='fs-3' />
+    </Link>
+    <button
+      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+      onClick={() => openDeleteModal(e.id)}
+    >
+      <KTIcon iconName='trash' className='fs-3' />
+    </button>
+  </>
+)}
+
                     </td>
                   </tr>
                   <tr>

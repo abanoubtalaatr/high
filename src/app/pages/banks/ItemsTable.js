@@ -2,19 +2,31 @@ import React, { useState } from 'react'
 import { KTIcon } from '../../../_metronic/helpers'
 import EditModal from './EditModal'
 import { Link } from 'react-router-dom'
+import DeleteModal from './DeleteModal'
 
 function ItemsTable(props) {
   const { items, selectedCurrency } = props
-  console.log(items, 'itesm from')
+  
   const [itemID, setItemId] = useState('')
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const closeDeleteModal = () => setShowDeleteModal(false)
 
   const openEditModal = (id) => {
     setShowEditModal(true)
     setItemId(id)
   }
   const closeEditModal = () => setShowEditModal(false)
+  const openDeleteModal = (id) => {
+    setShowDeleteModal(true)
+    setItemId(id)
+  }
 
+  const completeHandler = () => {
+    setShowEditModal(false)
+    setShowDeleteModal(false)
+    // onComplete(true)
+  }
   return (
     <>
       <div className='table-responsive'>
@@ -57,6 +69,12 @@ function ItemsTable(props) {
                     >
                       <i className='fa-solid fa-globe fs-3'></i>
                     </Link>
+                    <button
+                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                      onClick={() => openDeleteModal(e.id)}
+                    >
+                      <KTIcon iconName='trash' className='fs-3' />
+                    </button>
                   </td>
                 </tr>
               )
@@ -68,6 +86,14 @@ function ItemsTable(props) {
       </div>
 
       {showEditModal && <EditModal show={showEditModal} onHide={closeEditModal} itemId={itemID} />}
+      {showDeleteModal && (
+        <DeleteModal
+          show={showDeleteModal}
+          onHide={closeDeleteModal}
+          onComplete={completeHandler}
+          itemId={itemID}
+        />
+      )}
     </>
   )
 }

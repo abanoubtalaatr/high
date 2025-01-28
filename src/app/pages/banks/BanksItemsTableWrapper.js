@@ -27,6 +27,9 @@ function BanksItemsTableWrapper(props) {
     page: 1,
     limit: 15,
   })
+  useEffect(() => {
+    getJobsHandler();
+  }, [parms])
   // paginationHandler
   const paginationHandler = (paginationParams) => {
     setParms({ ...parms, ...paginationParams })
@@ -136,21 +139,7 @@ function BanksItemsTableWrapper(props) {
                   />
                 </div>
               </span>
-              <span>
-                <Select
-                  isLoading={isBanksLoading}
-                  isDisabled={isBanksDisabled}
-                  isSearchable={true}
-                  className='react-select-container'
-                  classNamePrefix='react-select'
-                  placeholder='select bank'
-                  name='bank'
-                  defaultValue={!isBanksDisabled ? bankChoice : loadOptions[0]}
-                  value={!isBanksDisabled ? bankChoice : loadOptions[0]}
-                  options={banksOptions}
-                  onChange={onChangeHandler}
-                />
-              </span>
+              
             </div>
           </div>
         </div>

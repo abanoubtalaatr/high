@@ -61,6 +61,12 @@ const SidebarMenuMain = () => {
       title={intl.formatMessage({id: 'FINANCIALS'})}
       fontIcon='bi-app-indicator'
     />
+    <SidebarMenuItem
+      to='/banks/list'
+      icon='bank'
+      title={intl.formatMessage({id: 'BANKS'})}
+      fontIcon='bi-app-indicator'
+    />
       <SidebarMenuItem
       to='/wallet'
       icon='wallet'
