@@ -154,23 +154,23 @@ console.log(itemDetails,'details')
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.base_price} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.discount} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.discount} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
                     <td className='text-gray-700'>{itemDetails?.total_income_from_event || '0'} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax ({itemDetails?.playerPricingData?.pricing?.tax_percent || '0'} %) :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.playerPricingData?.tax || '0'} SAR</td>
+                    <td>Tax ({itemDetails?.pricing?.price_per_user?.tax_percent || '0'} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.tax || '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.playerPricingData?.price_after_discount} SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.price_per_user?.total_price} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}
@@ -254,11 +254,11 @@ console.log(itemDetails,'details')
                 <tbody>
                   <tr>
                     <td>Total Number of Players :</td>
-                    <td className='text-gray-700'>{itemDetails?.player_numbers}</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.total_joined_players}</td>
                   </tr>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
@@ -310,11 +310,11 @@ console.log(itemDetails,'details')
                 <tbody>
                   <tr>
                     <td>Total Number of left players with fee :</td>
-                    <td className='text-gray-700'>{itemDetails?.late_left_players_count} </td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_fees_from_left_player?.total_left_late_players} </td>
                   </tr>
                   <tr>
                     <td>Fee Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>

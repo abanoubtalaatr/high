@@ -166,6 +166,7 @@ function BanksItemsTableWrapper(props) {
           ) : totalRecord === 0 ? (
             <div className='mb-3'>there is no data to display</div>
           ) : (
+            
             <ItemsTable items={items} onComplete={completeHandler} selectedBank={bankChoice.value} />
           )}
         </div>
