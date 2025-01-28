@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL
 
 export const USERS_URL = `${API_URL}/users`
 export const WALLETS_URL = `${API_URL}/wallets`
+export const Financial_URL = `${API_URL}/financials`
 export const STATES_URL = `${API_URL}/general/states`
 export const CURRENCIES_URL = `${API_URL}/currencies`
 export const GENERAL_CURRENCIES_URL = `${API_URL}/general/currencies`
@@ -29,6 +30,13 @@ export function getTransaction(itemDetails) {
 export function getWallets() {
   return axios.get(WALLETS_URL)
 }
+export function getFinancials(params) {
+  return axios.get(Financial_URL, {
+    params: params,
+  })
+}
+
+
 export function getGeneralCurrencies() {
   return axios.get(GENERAL_CURRENCIES_URL)
 }

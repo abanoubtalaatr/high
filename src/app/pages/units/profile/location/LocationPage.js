@@ -32,6 +32,7 @@ function LocationPage() {
     getLocation(unitId)
       .then((res) => {
         setLocationDetails(res.data.data)
+        console.log(res.data.data)
         setGoogleMapLoad(true)
         setonComplete(false)
         setMapCenter({
@@ -141,6 +142,12 @@ function LocationPage() {
                 <td className='w-lg-300px'>country</td>
                 <td className='text-gray-700 fw-bolder'>
                   {(locationDetails.country && locationDetails.country.name) || '---'}
+                </td>
+              </tr>
+              <tr>
+                <td className='w-lg-300px'>branch</td>
+                <td className='text-gray-700 fw-bolder'>
+                  {(locationDetails.branch && locationDetails.branch.name) || '---'}
                 </td>
               </tr>
               <tr>

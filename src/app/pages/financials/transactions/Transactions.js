@@ -399,7 +399,6 @@ function Transactions() {
           ) : (
             <TransactionsTable items={items} />
           )}
-          <TransactionsTable items={items} />
         </div>
         {/* end::Body */}
         {/* begin::footer */}

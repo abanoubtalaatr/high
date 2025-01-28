@@ -1,9 +1,8 @@
-
-import { Link } from 'react-router-dom'
-import { toAbsoluteUrl } from '../../../_metronic/helpers'
+import {Link} from 'react-router-dom'
+import {toAbsoluteUrl} from '../../../_metronic/helpers'
 
 function CountryFinancial(props) {
-  const { FinancialDetails } = props
+  const {FinancialDetails} = props
   return (
     <div className='col-lg-6 col-xl-4 col-xxl-3 mb-5' key={FinancialDetails.id}>
       <div className='card card-xxl-stretch justify-content-center'>
@@ -11,9 +10,7 @@ function CountryFinancial(props) {
         <div className='card-body py-5 px-5 flex-grow-0 text-center'>
           <div className='d-flex align-items-center justify-content-center gap-3 '>
             <div className='symbol symbol-25px'>
-              <img
-                src={toAbsoluteUrl(`/media/flags/${FinancialDetails.iso.toLowerCase()}.svg`)}
-              />
+              <img src={toAbsoluteUrl(`/media/flags/${FinancialDetails.iso.toLowerCase()}.svg`)} />
             </div>
             <h3 className='fw-bold text-gray-700 fs-5 m-0'>{FinancialDetails.name || '---'}</h3>
           </div>
@@ -34,10 +31,12 @@ function CountryFinancial(props) {
                     <span>online</span>
                   </td>
                   <td>
-                    <span>5000</span>
+                    <span>{Number(FinancialDetails?.online_revenue || 0).toFixed(2)}</span>
                   </td>
                   <td>
-                    <span className='d-flex gap-2'>5000</span>
+                    <span className='d-flex gap-2'>
+                      {Number(FinancialDetails?.online_collected || 0).toFixed(2)}
+                    </span>
                   </td>
                 </tr>
                 <tr>
@@ -45,10 +44,12 @@ function CountryFinancial(props) {
                     <span>cash</span>
                   </td>
                   <td>
-                    <span>5000</span>
+                    <span>{Number(FinancialDetails?.cash_revenue || 0).toFixed(2)}</span>
                   </td>
                   <td>
-                    <span className='d-flex gap-2'>1000</span>
+                    <span className='d-flex gap-2'>
+                      {Number(FinancialDetails?.cash_collected || 0).toFixed(2)}
+                    </span>
                   </td>
                 </tr>
                 <tr>
@@ -56,19 +57,33 @@ function CountryFinancial(props) {
                     <span className='text-dark fw-bold'>total</span>
                   </td>
                   <td>
-                    <span className='text-dark fw-bold'>10000</span>
+                    <span className='text-dark fw-bold'>
+                      {(
+                        Number(FinancialDetails?.online_revenue || 0) +
+                        Number(FinancialDetails?.cash_revenue || 0)
+                      ).toFixed(2)}
+                    </span>
                   </td>
                   <td>
-                    <span className='text-dark fw-bold'>6000</span>
+                    <span className='text-dark fw-bold'>
+                      {(
+                        Number(FinancialDetails?.online_collected || 0) +
+                        Number(FinancialDetails?.cash_collected || 0)
+                      ).toFixed(2)}
+                    </span>
                   </td>
                 </tr>
               </tbody>
+
               {/* end::Table body */}
             </table>
           </div>
           <div className='text-center '>
-            <Link className='btn btn-primary' to={`/financials/${FinancialDetails.iso}/transactions`}
-              state={{countryName:FinancialDetails.name}}>
+            <Link
+              className='btn btn-primary'
+              to={`/financials/${FinancialDetails.iso}/transactions`}
+              state={{countryName: FinancialDetails.name}}
+            >
               show
             </Link>
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { KTIcon } from '../../../_metronic/helpers'
-import { getWallets } from './_requests'
+import { getFinancials } from './_requests'
 import Spinner from '../../components/spinner/Spinner'
 import CountryFinancial from './CountryFinancial'
 
@@ -14,7 +14,7 @@ function FinancialsWrapper() {
   // get items
   const getItemsHandler = () => {
     setIsLoaded(true)
-    getWallets()
+    getFinancials()
       .then((res) => {
         const data = res.data.data;
         setItems(data)
@@ -47,6 +47,7 @@ function FinancialsWrapper() {
         ) : (
           items.map((e) => {
             return (
+              
               <CountryFinancial FinancialDetails={e} />
             )
           })
