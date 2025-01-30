@@ -65,7 +65,7 @@ function Transactions() {
     
     // Get the headers by excluding 'public_event' and 'bookings'
     const headers = Object.keys(data[0])
-      .filter(key => key !== 'public_event' && key !== 'bookings')
+      .filter(key => key !== 'public_event' && key !== 'booking')
       .join(',');
   
     // Get the rows by excluding 'public_event' and 'bookings' keys
