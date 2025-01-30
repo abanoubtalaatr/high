@@ -1,91 +1,108 @@
-import { useEffect, useState } from 'react'
-import Pagination from '../../../components/pagination/Pagination'
-import Spinner from '../../../components/spinner/Spinner'
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useLocation, useParams } from 'react-router-dom'
-import { getTransactions } from '../_requests'
-import { useIntl } from 'react-intl'
+import { useEffect, useState } from 'react';
+import Pagination from '../../../components/pagination/Pagination';
+import Spinner from '../../../components/spinner/Spinner';
+import { KTIcon } from '../../../../_metronic/helpers';
+import { useLocation, useParams } from 'react-router-dom';
+import { getTransactionsCountry } from '../_requests';
+import { useIntl } from 'react-intl';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { Button } from 'react-bootstrap';
-import TransactionsTable from './TransactionsTable'
-import { FilterDropdown } from './FilterDropdown'
+import TransactionsTable from './TransactionsTable';
+import { FilterDropdown } from './FilterDropdown';
 
 function Transactions() {
-  const { iso } = useParams()
-  const intl = useIntl()
-  const location = useLocation()
-  const countryName = location.state.countryName
-  const userId = 15
-  const [totalRecord, setTotalRecord] = useState(0)
-  const [items, setItems] = useState([])
-  const [errorMessage, setErrorMessage] = useState('')
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [parms, setParms] = useState({
-    status: '',
-    search: '',
+  const { iso } = useParams();
+  const intl = useIntl();
+  const location = useLocation();
+  const countryName = location.state.countryName;
+  const [totalRecord, setTotalRecord] = useState(0);
+  const [items, setItems] = useState([]);
+  const [statistics, setStatistics] = useState({
+    booking: { online_revenue: 0, cash_revenue: 0, online_collected: 0, cash_collected: 0 },
+    public_event: { online_revenue: 0, cash_revenue: 0, online_collected: 0, cash_collected: 0 },
+  });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [filters, setFilters] = useState({
+    year: '',
+    month: '',
+    state_id: '',
+    city_id: '',
     page: 1,
     limit: 15,
-  })
-  const [classAllButton, setClassAllButton] = useState('btn-bg-dark btn-text-white')
-  const [classInButton, setClassInButton] = useState('btn-light')
-  const [classOutButton, setClassOutButton] = useState('btn-light')
-  const fundsPath = '/users/profile/' + userId + '/wallet/funds'
-  const cashOutPath = '/users/profile/' + userId + '/wallet/cash-out'
-  // statusHandler
-  const statusHandler = (e, buttonId) => {
-    buttonId === 'all'
-      ? setClassAllButton('btn-bg-dark btn-text-white')
-      : setClassAllButton('btn-light')
-    buttonId === 'in'
-      ? setClassInButton('btn-bg-dark btn-text-white')
-      : setClassInButton('btn-light')
-    buttonId === 'out'
-      ? setClassOutButton('btn-bg-dark btn-text-white')
-      : setClassOutButton('btn-light')
-    setParms({ ...parms, type: e, page: 1 })
-  }
-  const searchHandler = (e) => {
-    let inputValue = e.target.value
-    setParms({ ...parms, search: inputValue })
-  }
-  // paginationHandler
-  const paginationHandler = (paginationParams) => {
-    setParms({ ...parms, ...paginationParams })
-  }
-  // end paginationHandler
-  // end paginationHandler
-  const filterHandler = (activity_category_id, activity_id, type_id, capacity, availability) => {
-    setParms({
-      ...parms,
-      activity_category_id: activity_category_id,
-      activity_id: activity_id,
-      type_id: type_id,
-      capacity: capacity,
-      availability: availability,
-    })
-  }
-  const resetFilterHandler = () => {
-    setParms({ ...parms, country_id: '', state_id: '', city_id: '' })
-  }
-  // get items
-  const getItemsHandler = () => {
-    getTransactions(iso, parms)
-      .then((res) => {
-        setItems(res.data.data)
-        setIsLoaded(false)
-        setTotalRecord(res.data.total)
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data.message)
-        setIsLoaded(false)
-      })
-  }
+  });
 
+  // Get items with filters
+  const getItemsHandler = async () => {
+    setIsLoaded(true);
+    try {
+      const res = await getTransactionsCountry(iso, filters);
+      setItems(res.data.data.items.data);
+      setStatistics(res.data.data.statistics);
+      setTotalRecord(res.data.data.items.total);
+    } catch (err) {
+      setErrorMessage(err.response?.data?.message || 'An error occurred');
+    } finally {
+      setIsLoaded(false);
+    }
+  };
+
+  // Handle filter changes
+  const handleFilter = (newFilters) => {
+    setFilters({ ...filters, ...newFilters, page: 1 }); // Reset to first page when filters are applied
+  };
+
+  // Handle export
+  const handleExport = () => {
+    const csvContent = convertToCSV(items);
+    downloadCSV(csvContent, 'transactions.csv');
+  };
+
+  // Convert data to CSV
+  const convertToCSV = (data) => {
+    console.log(data, 'data');
+    
+    // Get the headers by excluding 'public_event' and 'bookings'
+    const headers = Object.keys(data[0])
+      .filter(key => key !== 'public_event' && key !== 'bookings')
+      .join(',');
+  
+    // Get the rows by excluding 'public_event' and 'bookings' keys
+    const rows = data
+      .map((item) => 
+        Object.entries(item)
+          .filter(([key]) => key !== 'public_event' && key !== 'booking')  // Exclude these keys
+          .map(([_, value]) => value)  // Get the values of the remaining keys
+          .join(',')
+      )
+      .join('\n');
+  
+    return `${headers}\n${rows}`;
+  };
+  
+
+  // Download CSV
+  const downloadCSV = (content, fileName) => {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  };
+
+  // Get the dynamic date for the header
+  const getDynamicDate = () => {
+    const currentDate = new Date();
+    const year = filters.year || currentDate.getFullYear();
+    const month = filters.month || currentDate.getMonth() + 1; // Months are 0-indexed
+    return `${String(month).padStart(2, '0')}/${year}`;
+  };
+
+  // Fetch data on component mount or when filters change
   useEffect(() => {
-    setIsLoaded(true)
-    getItemsHandler()
-  }, [parms])
+    getItemsHandler();
+  }, [filters]);
 
   return (
     <>
@@ -93,16 +110,19 @@ function Transactions() {
         {/* begin::Header */}
         <div className='card-header border-0'>
           <h5 className='card-title align-items-start flex-column'>
-            <span className='mb-3 fw-bolder'>{countryName} transactions of 26/03/2024 in all partners</span>
+            <span className='mb-3 fw-bolder'>
+              {countryName} transactions of {getDynamicDate()} in all partners
+            </span>
           </h5>
           <div>
             <div className='card-toolbar gap-3'>
               <button
                 type='button'
                 className='btn btn-light btn-sm btn-flex fw-bold'
+                onClick={handleExport}
               >
                 <KTIcon iconName='file-up' className='fs-6 text-muted me-1' />
-                export
+                Export
               </button>
               <button
                 type='button'
@@ -114,48 +134,38 @@ function Transactions() {
                 <KTIcon iconName='filter' className='fs-6 text-muted me-1' />
                 Filter
               </button>
-              <FilterDropdown onAplly={filterHandler} onReset={resetFilterHandler} />
+              <FilterDropdown onApply={handleFilter} onReset={() => setFilters({ ...filters, year: '', month: '', state_id: '', city_id: '', page: 1 })} />
             </div>
           </div>
         </div>
         <div className='card-body py-3'>
           <div className='row'>
-            {/* booking */}
+            {/* Booking Statistics */}
             <div className='col-md-4 px-5'>
               <table className='table table-row-dashed gs-0 gy-3'>
-                {/* begin::Table body */}
                 <thead className='fs-6'>
                   <tr>
-                    <th className='min-w-100px text-dark fw-bold fs-3'>booking</th>
-                    <th className='min-w-100px'>revenue</th>
-                    <th className='min-w-100px'>collected</th>
+                    <th className='min-w-100px text-dark fw-bold fs-3'>Booking</th>
+                    <th className='min-w-100px'>Revenue</th>
+                    <th className='min-w-100px'>Collected</th>
                   </tr>
                 </thead>
                 <tbody className='fs-6'>
                   <tr>
-                    <td>
-                      <span>online</span>
-                    </td>
-                    <td>
-                      <span>5000</span>
-                    </td>
+                    <td>Online</td>
+                    <td>{Number(statistics.booking.online_revenue || 0).toFixed(2)}</td>
                     <td>
                       <span className='d-flex gap-2'>
-                        5000
+                        {Number(statistics.booking.online_collected || 0).toFixed(2)}
                         <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              collected by highfive
-                            </Tooltip>
-                          }
+                          placement='top'
+                          overlay={<Tooltip>Collected by Highfive</Tooltip>}
                         >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
                             </i>
                           </Button>
                         </OverlayTrigger>
@@ -163,85 +173,20 @@ function Transactions() {
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <span>cash</span>
-                    </td>
-                    <td>
-                      <span>5000</span>
-                    </td>
+                    <td>Cash</td>
+                    <td>{Number(statistics.booking.cash_revenue || 0).toFixed(2)}</td>
                     <td>
                       <span className='d-flex gap-2'>
-                        1000
+                        {Number(statistics.booking.cash_collected || 0).toFixed(2)}
                         <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              5.00 sar to be collected
-                            </Tooltip>
-                          }
+                          placement='top'
+                          overlay={<Tooltip>Amount to be collected</Tooltip>}
                         >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
-                            </i>
-                          </Button>
-                        </OverlayTrigger></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span className='text-dark fw-bold'>total <small className='fs-7'>(SAR)</small></span>
-                    </td>
-                    <td>
-                      <span className='text-dark fw-bold'>10000</span>
-                    </td>
-                    <td>
-                      <span className='text-dark fw-bold'>6000</span>
-                    </td>
-                  </tr>
-                </tbody>
-                {/* end::Table body */}
-              </table>
-            </div>
-            {/* public event */}
-            <div className='col-md-4 px-5'>
-              <table className='table table-row-dashed gs-0 gy-3'>
-                {/* begin::Table body */}
-                <thead className='fs-6'>
-                  <tr>
-                    <th className='min-w-100px text-dark fw-bold fs-3'>public event</th>
-                    <th className='min-w-100px'>revenue</th>
-                    <th className='min-w-100px'>collected</th>
-                  </tr>
-                </thead>
-                <tbody className='fs-6'>
-                  <tr>
-                    <td>
-                      <span>online</span>
-                    </td>
-                    <td>
-                      <span>5000 </span>
-                    </td>
-                    <td>
-                      <span className='d-flex gap-2'>
-                        5000
-                        <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              collected by highfive
-                            </Tooltip>
-                          }
-                        >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
                             </i>
                           </Button>
                         </OverlayTrigger>
@@ -249,85 +194,130 @@ function Transactions() {
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <span>cash</span>
+                    <td className='text-dark fw-bold'>Total (SAR)</td>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.booking.online_revenue || 0) +
+                        Number(statistics.booking.cash_revenue || 0)
+                      ).toFixed(2)}
                     </td>
-                    <td>
-                      <span>5000</span>
-                    </td>
-                    <td>
-                      <span className='d-flex gap-2'>
-                        1000
-                        <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              5.00 sar to be collected
-                            </Tooltip>
-                          }
-                        >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
-                            </i>
-                          </Button>
-                        </OverlayTrigger></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span className='text-dark fw-bold'>total <small className='fs-7'>(SAR)</small></span>
-                    </td>
-                    <td>
-                      <span className='text-dark fw-bold'>10000</span>
-                    </td>
-                    <td>
-                      <span className='text-dark fw-bold'>6000</span>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.booking.online_collected || 0) +
+                        Number(statistics.booking.cash_collected || 0)
+                      ).toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
-                {/* end::Table body */}
               </table>
             </div>
-            {/* revenues */}
+
+            {/* Public Event Statistics */}
+            <div className='col-md-4 px-5'>
+              <table className='table table-row-dashed gs-0 gy-3'>
+                <thead className='fs-6'>
+                  <tr>
+                    <th className='min-w-100px text-dark fw-bold fs-3'>Public Event</th>
+                    <th className='min-w-100px'>Revenue</th>
+                    <th className='min-w-100px'>Collected</th>
+                  </tr>
+                </thead>
+                <tbody className='fs-6'>
+                  <tr>
+                    <td>Online</td>
+                    <td>{Number(statistics.public_event.online_revenue || 0).toFixed(2)}</td>
+                    <td>
+                      <span className='d-flex gap-2'>
+                        {Number(statistics.public_event.online_collected || 0).toFixed(2)}
+                        <OverlayTrigger
+                          placement='top'
+                          overlay={<Tooltip>Collected by Highfive</Tooltip>}
+                        >
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
+                            </i>
+                          </Button>
+                        </OverlayTrigger>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cash</td>
+                    <td>{Number(statistics.public_event.cash_revenue || 0).toFixed(2)}</td>
+                    <td>
+                      <span className='d-flex gap-2'>
+                        {Number(statistics.public_event.cash_collected || 0).toFixed(2)}
+                        <OverlayTrigger
+                          placement='top'
+                          overlay={<Tooltip>Amount to be collected</Tooltip>}
+                        >
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
+                            </i>
+                          </Button>
+                        </OverlayTrigger>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-dark fw-bold'>Total (SAR)</td>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.public_event.online_revenue || 0) +
+                        Number(statistics.public_event.cash_revenue || 0)
+                      ).toFixed(2)}
+                    </td>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.public_event.online_collected || 0) +
+                        Number(statistics.public_event.cash_collected || 0)
+                      ).toFixed(2)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Revenues Statistics */}
             <div className='col-md-4 px-5'>
               <table className='table table-row-dashed'>
-                {/* begin::Table body */}
                 <thead className='fs-6'>
                   <tr>
-                    <th className='min-w-100px text-dark fw-bold fs-3'>revenues</th>
-                    <th className='min-w-100px'>revenue</th>
-                    <th className='min-w-100px'>collected</th>
+                    <th className='min-w-100px text-dark fw-bold fs-3'>Revenues</th>
+                    <th className='min-w-100px'>Revenue</th>
+                    <th className='min-w-100px'>Collected</th>
                   </tr>
                 </thead>
                 <tbody className='fs-6'>
                   <tr>
+                    <td>Online</td>
                     <td>
-                      <span>online</span>
-                    </td>
-                    <td>
-                      <span>5000</span>
+                      {(
+                        Number(statistics.booking.online_revenue || 0) +
+                        Number(statistics.public_event.online_revenue || 0)
+                      ).toFixed(2)}
                     </td>
                     <td>
                       <span className='d-flex gap-2'>
-                        5000
+                        {(
+                          Number(statistics.booking.online_collected || 0) +
+                          Number(statistics.public_event.online_collected || 0)
+                        ).toFixed(2)}
                         <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              collected by highfive
-                            </Tooltip>
-                          }
+                          placement='top'
+                          overlay={<Tooltip>Collected by Highfive</Tooltip>}
                         >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
                             </i>
                           </Button>
                         </OverlayTrigger>
@@ -335,82 +325,85 @@ function Transactions() {
                     </td>
                   </tr>
                   <tr>
+                    <td>Cash</td>
                     <td>
-                      <span>cash</span>
-                    </td>
-                    <td>
-                      <span>5000</span>
+                      {(
+                        Number(statistics.booking.cash_revenue || 0) +
+                        Number(statistics.public_event.cash_revenue || 0)
+                      ).toFixed(2)}
                     </td>
                     <td>
                       <span className='d-flex gap-2'>
-                        1000
+                        {(
+                          Number(statistics.booking.cash_collected || 0) +
+                          Number(statistics.public_event.cash_collected || 0)
+                        ).toFixed(2)}
                         <OverlayTrigger
-                          placement={'top'}
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={
-                            <Tooltip>
-                              5.00 sar to be collected
-                            </Tooltip>
-                          }
+                          placement='top'
+                          overlay={<Tooltip>Amount to be collected</Tooltip>}
                         >
-                          <Button variant="" className='p-0 m-0'>
-                            <i class="ki-duotone ki-information fs-3 text-danger">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                              <span class="path3"></span>
+                          <Button variant='' className='p-0 m-0'>
+                            <i className='ki-duotone ki-information fs-3 text-danger'>
+                              <span className='path1'></span>
+                              <span className='path2'></span>
+                              <span className='path3'></span>
                             </i>
                           </Button>
-                        </OverlayTrigger></span>
+                        </OverlayTrigger>
+                      </span>
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <span className='text-dark fw-bold'>total <small className='fs-7'>(SAR)</small></span>
+                    <td className='text-dark fw-bold'>Total (SAR)</td>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.booking.online_revenue || 0) +
+                        Number(statistics.booking.cash_revenue || 0) +
+                        Number(statistics.public_event.online_revenue || 0) +
+                        Number(statistics.public_event.cash_revenue || 0)
+                      ).toFixed(2)}
                     </td>
-                    <td>
-                      <span className='text-dark fw-bold'>10000</span>
-                    </td>
-                    <td>
-                      <span className='text-dark fw-bold'>6000</span>
+                    <td className='text-dark fw-bold'>
+                      {(
+                        Number(statistics.booking.online_collected || 0) +
+                        Number(statistics.booking.cash_collected || 0) +
+                        Number(statistics.public_event.online_collected || 0) +
+                        Number(statistics.public_event.cash_collected || 0)
+                      ).toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
-                {/* end::Table body */}
               </table>
             </div>
           </div>
-
         </div>
       </div>
-      {/* end::Header */}
-      {/* begin::Body */}
+
+      {/* Transactions Table */}
       <div className='card mb-10'>
         <div className='card-body py-3'>
           {isLoaded ? (
             <div className='mb-3'>
-              <Spinner contentText={'loading ...'} />
+              <Spinner contentText={'Loading...'} />
             </div>
           ) : errorMessage ? (
-            <div className={`alert alert-danger d-flex align-items-center p-5 mb-0`}>
+            <div className='alert alert-danger d-flex align-items-center p-5 mb-0'>
               <div className='d-flex flex-column'>{errorMessage}</div>
             </div>
           ) : totalRecord === 0 ? (
-            <div className='mb-3'>there is no data to display</div>
+            <div className='mb-3'>There is no data to display.</div>
           ) : (
             <TransactionsTable items={items} />
           )}
         </div>
-        {/* end::Body */}
-        {/* begin::footer */}
-        {totalRecord > 0 && (<div className='card-footer'>
-          {/* Start Pagination */}
-          <Pagination totalRecord={totalRecord} paginationParams={paginationHandler} />
-          {/* End Pagination */}
-        </div>)}
-        {/* end::footer */}
+        {totalRecord > 0 && (
+          <div className='card-footer'>
+            <Pagination totalRecord={totalRecord} paginationParams={(params) => setFilters({ ...filters, ...params })} />
+          </div>
+        )}
       </div>
     </>
-  )
+  );
 }
 
-export default Transactions
+export default Transactions;

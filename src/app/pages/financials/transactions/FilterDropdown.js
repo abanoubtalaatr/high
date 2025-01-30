@@ -1,107 +1,103 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Select from 'react-select'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { getCities } from '../../partners/_requests'
-import { getStates } from '../_requests'
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { getCities } from '../../partners/_requests';
+import { getStates } from '../_requests';
 
-export function FilterDropdown(porop) {
-  const { onAplly, onReset } = porop
-  const DefOptions = [{ value: '', label: 'all' }]
-  const loadOptions = [{ value: '', label: 'loading ...' }]
-  const [year, setYear] = useState('')
-  const [month, setMonth] = useState('')
-  const [isCountriesLoading, setIsCountriesLoading] = useState(false)
-  const [isStatesLoading, setIsStatesLoading] = useState(false)
-  const [isCitiesLoading, setIsCitiesLoading] = useState(false)
-  const [isCountriesDisabled, setIsCountriesDisabled] = useState(false)
-  const [isStatesDisabled, setIsStatesDisabled] = useState(false)
-  const [isCitiesDisabled, setIsCitiesDisabled] = useState(false)
-  const [countriesOptions, setCountriesOptions] = useState([])
-  const [stateOptions, setStateOptions] = useState([])
-  const [citiesOptions, setCitiesOptions] = useState([])
-  const [stateChoice, setStateChoice] = useState(DefOptions[0])
-  const [cityChoice, setCityChoice] = useState(DefOptions[0])
+export function FilterDropdown({ onApply, onReset }) {
+  const DefOptions = [{ value: '', label: 'all' }];
+  const loadOptions = [{ value: '', label: 'loading ...' }];
+  const [year, setYear] = useState(null);
+  const [month, setMonth] = useState(null);
+  const [isStatesLoading, setIsStatesLoading] = useState(false);
+  const [isCitiesLoading, setIsCitiesLoading] = useState(false);
+  const [isStatesDisabled, setIsStatesDisabled] = useState(false);
+  const [isCitiesDisabled, setIsCitiesDisabled] = useState(false);
+  const [stateOptions, setStateOptions] = useState([]);
+  const [citiesOptions, setCitiesOptions] = useState([]);
+  const [stateChoice, setStateChoice] = useState(DefOptions[0]);
+  const [cityChoice, setCityChoice] = useState(DefOptions[0]);
 
-  const countriesOptionsHandler = () => {
-    const newCountriesOptions = [...DefOptions, ...countriesOptions]
-    setCountriesOptions(newCountriesOptions)
-  }
-  const stateOptionsHandler = (res) => {
-    const newStatesOptions = [...DefOptions, ...stateOptions]
-    setStateOptions(newStatesOptions)
-  }
-  const citiesOptionsHandler = (res) => {
-    const newCitiesOptions = [...DefOptions, ...citiesOptions]
-    setCitiesOptions(newCitiesOptions)
-  }
+  // Fetch states on component mount
+  useEffect(() => {
+    setIsStatesLoading(true);
+    setIsStatesDisabled(true);
+    getStates({ country_iso: 'SA' })
+      .then((res) => {
+        setStateOptions([
+          ...DefOptions,
+          ...res.data.data.map((el) => ({
+            value: el.id,
+            label: el.name,
+          })),
+        ]);
+        setIsStatesLoading(false);
+        setIsStatesDisabled(false);
+      })
+      .catch((err) => {
+        setIsStatesLoading(false);
+        setIsStatesDisabled(false);
+      });
+  }, []);
+
+  // Fetch cities when state is selected
   const stateOnChange = (choice) => {
-    setIsCitiesLoading(true)
-    setIsCitiesDisabled(true)
-    setStateChoice(choice)
-    setCityChoice(DefOptions[0])
-    setCitiesOptions(DefOptions)
+    setIsCitiesLoading(true);
+    setIsCitiesDisabled(true);
+    setStateChoice(choice);
+    setCityChoice(DefOptions[0]);
+    setCitiesOptions(DefOptions);
+
     if (choice.value) {
       getCities({ state_id: choice.value })
         .then((res) => {
-          setCitiesOptions(
-            res.data.data.map((el) => ({
+          setCitiesOptions([
+            ...DefOptions,
+            ...res.data.data.map((el) => ({
               value: el.id,
               label: el.name,
-            }))
-          )
-          setIsCitiesLoading(false)
-          setIsCitiesDisabled(false)
+            })),
+          ]);
+          setIsCitiesLoading(false);
+          setIsCitiesDisabled(false);
         })
         .catch((err) => {
-          setIsCitiesLoading(false)
-          setIsCitiesDisabled(false)
-        })
+          setIsCitiesLoading(false);
+          setIsCitiesDisabled(false);
+        });
     } else {
-      setCitiesOptions(DefOptions)
-      setIsCitiesLoading(false)
-      setIsCitiesDisabled(false)
+      setCitiesOptions(DefOptions);
+      setIsCitiesLoading(false);
+      setIsCitiesDisabled(false);
     }
-  }
-  // submit buttons
+  };
+
+  // Apply filters
   const applyHandler = () => {
-    onAplly(
-    )
-  }
+    const filters = {
+      year: year ? year.getFullYear() : '',
+      month: month ? month.getMonth() + 1 : '', // Months are 0-indexed
+      state_id: stateChoice.value,
+      city_id: cityChoice.value,
+    };
+    onApply(filters); // Pass filters to the parent component
+  };
+
+  // Reset filters
   const resetHandler = () => {
-    // setIsLoading(true)
-  }
-  useEffect(() => {
-    setIsStatesLoading(true)
-    setIsStatesDisabled(true)
-    getStates({ country_iso: 'SA' })
-      .then((res) => {
-        setStateOptions(
-          res.data.data.map((el) => ({
-            value: el.id,
-            label: el.name,
-          }))
-        )
-        setIsStatesLoading(false)
-        setIsStatesDisabled(false)
-      })
-      .catch((err) => {
-        setIsStatesLoading(false)
-        setIsStatesDisabled(false)
-      })
-  }, [])
-  useEffect(() => {
-    stateOptionsHandler()
-  }, [isStatesLoading])
-  useEffect(() => {
-    citiesOptionsHandler()
-  }, [isCitiesLoading])
+    setYear(null);
+    setMonth(null);
+    setStateChoice(DefOptions[0]);
+    setCityChoice(DefOptions[0]);
+    onReset(); // Notify parent component to reset filters
+  };
+
   return (
     <div
-      className='menu menu-sub menu-sub-dropdown w-250px w-md-300px mh-550px scroll '
+      className='menu menu-sub menu-sub-dropdown w-250px w-md-300px mh-550px scroll'
       data-kt-menu='true'
       data-kt-scroll='true'
-    // data-kt-scroll-height="{default: '300px'}"
     >
       <div className='px-7 py-5'>
         <div className='fs-5 text-dark fw-bolder'>Filter Options</div>
@@ -109,33 +105,31 @@ export function FilterDropdown(porop) {
       <div className='separator border-gray-200'></div>
       <div className='px-7 py-5'>
         <div className='mb-3'>
-          <label className='form-label fw-bold'>year :</label>
+          <label className='form-label fw-bold'>Year:</label>
           <DatePicker
             autocomplete='off'
-            name='date_from'
             className='form-control form-control-solid mb-3'
             selected={year}
             showYearPicker
-            placeholderText='select year'
+            placeholderText='Select year'
             dateFormat='yyyy'
             onChange={(date) => setYear(date)}
           />
         </div>
         <div className='mb-3'>
-          <label className='form-label fw-bold'>month :</label>
+          <label className='form-label fw-bold'>Month:</label>
           <DatePicker
             autocomplete='off'
-            name='date_to'
             className='form-control form-control-solid'
             selected={month}
-            placeholderText='select month'
+            placeholderText='Select month'
             dateFormat='MM'
             showMonthYearPicker
             onChange={(date) => setMonth(date)}
           />
         </div>
         <div className='mb-3'>
-          <label className='form-label fw-bold'>state:</label>
+          <label className='form-label fw-bold'>State:</label>
           <div>
             <Select
               isLoading={isStatesLoading}
@@ -145,15 +139,14 @@ export function FilterDropdown(porop) {
               classNamePrefix='react-select'
               placeholder='Select state'
               name='state'
-              defaultValue={!isStatesDisabled ? stateChoice : loadOptions[0]}
-              value={!isStatesDisabled ? stateChoice : loadOptions[0]}
+              value={stateChoice}
               options={stateOptions}
               onChange={stateOnChange}
             />
           </div>
         </div>
         <div className='mb-5'>
-          <label className='form-label fw-bold'>city:</label>
+          <label className='form-label fw-bold'>City:</label>
           <div>
             <Select
               isLoading={isCitiesLoading}
@@ -163,8 +156,7 @@ export function FilterDropdown(porop) {
               classNamePrefix='react-select'
               placeholder='Select city'
               name='city'
-              defaultValue={!isCitiesDisabled ? cityChoice : loadOptions[0]}
-              value={!isCitiesDisabled ? cityChoice : loadOptions[0]}
+              value={cityChoice}
               options={citiesOptions}
               onChange={(choice) => setCityChoice(choice)}
             />
@@ -174,7 +166,6 @@ export function FilterDropdown(porop) {
           <button
             type='reset'
             className='btn btn-sm btn-light btn-active-light-primary me-2'
-            // data-kt-menu-dismiss='true'
             onClick={resetHandler}
           >
             Reset
@@ -190,5 +181,5 @@ export function FilterDropdown(porop) {
         </div>
       </div>
     </div>
-  )
+  );
 }

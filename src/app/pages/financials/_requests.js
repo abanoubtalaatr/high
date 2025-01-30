@@ -18,6 +18,12 @@ export function getTransactions(iso, props) {
     params: props,
   })
 }
+
+export function getTransactionsCountry(iso, props) {
+  return axios.get(`${Financial_URL}/${iso}`, {
+    params: props,
+  })
+}
 // get Transaction
 export function getTransaction(itemDetails) {
   if (itemDetails.transactionType === 'wallet_fund') {
