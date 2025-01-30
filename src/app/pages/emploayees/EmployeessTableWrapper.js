@@ -30,15 +30,37 @@ function EmployeessTableWrapper(props) {
 
   // Apply Filters
   const applyFiltersHandler = (filters) => {
-    setFilters(filters);
-    console.log(filters,'filters')
-    setParms({
-      ...parms,
-      ...filters,
-      page: 1 // Reset to first page when filters are applied
-    });
+    // Replace 'all' values with empty strings
+    const updatedFilters = Object.keys(filters).reduce((acc, key) => {
+      acc[key] = filters[key] === 'all' ? '' : filters[key];
+      return acc;
+    }, {});
+  
+    // Reset 'active' filter if both 'country' and 'job' are empty
+    if (updatedFilters.country === '' && updatedFilters.job === '') {
+      updatedFilters.active = '';
+    }
+  
+    // Log the updated filters for debugging
+    console.log(updatedFilters, 'updatedFilters');
+  
+    // Update the state with the modified filters
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+      page: 1, // Reset to first page when filters are applied
+    }));
+  
+    // Update the parameters
+    setParms((prevParms) => ({
+      ...prevParms,
+      ...updatedFilters,
+      page: 1, // Reset to first page when filters are applied
+    }));
+  
+    // Trigger table refresh
+    startRefreshTable(true);
   };
-
   // Pagination Handler
   const paginationHandler = (paginationParams) => {
     setFilters({ ...filters, ...paginationParams });

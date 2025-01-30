@@ -11,7 +11,7 @@ function SettingsTable(props) {
         {/* end::Table head */}
         {/* begin::Table body */}
         <tbody>
-          <tr>
+          {/* <tr>
             <td className='w-lg-300px'>highfive users bookings</td>
             <td className='text-gray-700 fw-bolder'>
               {settingsDetails.allow_highfive_user_booking != 1 ? 'off' : 'on'}
@@ -22,7 +22,7 @@ function SettingsTable(props) {
                 <span>allow to receive online bookings via highfive app in approved units</span>
               </span>
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td className='w-lg-300px'>highfive users public events</td>
             <td className='text-gray-700 fw-bolder'>

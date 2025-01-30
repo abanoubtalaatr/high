@@ -10,7 +10,7 @@ function CountryFinancial(props) {
         <div className='card-body py-5 px-5 flex-grow-0 text-center'>
           <div className='d-flex align-items-center justify-content-center gap-3 '>
             <div className='symbol symbol-25px'>
-              <img src={toAbsoluteUrl(`/media/flags/${FinancialDetails.iso.toLowerCase()}.svg`)} />
+              <img src={toAbsoluteUrl(`/media/flags/${FinancialDetails?.iso?.toLowerCase()}.svg`)} />
             </div>
             <h3 className='fw-bold text-gray-700 fs-5 m-0'>{FinancialDetails.name || '---'}</h3>
           </div>

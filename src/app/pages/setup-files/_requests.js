@@ -31,7 +31,7 @@ export function deleteType(itemId) {
 }
 // services
 export function getServices(props) {
-  return axios.get(API_URL + "/services", {
+  return axios.get(API_URL + "/general/services", {
     params: props,
   })
 }

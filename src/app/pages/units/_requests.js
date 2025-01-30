@@ -230,6 +230,10 @@ export function updateAgeGroupsSettings(values, unitId) {
 export function getAssignTaxesSettings(unitId) {
   return axios.get(UNITS_URL + '/' + unitId + '/get-assigned-taxes')
 }
+
+export function getBranches() {
+  return axios.get(API_URL + '/branches')
+}
 // update assign taxes settings
 export function updateAssignTaxesSettings(
   countriesTaxesIds,

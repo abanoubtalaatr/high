@@ -212,7 +212,8 @@ function EditLocationModal(props) {
             <div className='col-sm-9'>
               <Select
                 isLoading={isCountriesLoading}
-                isDisabled={isCountriesDisabled}
+                isDisabled={true} // Set to true to disable the Select
+
                 isSearchable={true}
                 className='react-select-container'
                 classNamePrefix='react-select'

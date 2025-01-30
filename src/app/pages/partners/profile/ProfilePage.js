@@ -1,7 +1,7 @@
 import React from 'react'
-import { useIntl } from 'react-intl'
-import { PageTitle } from '../../../../_metronic/layout/core'
-import { Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom'
+import {useIntl} from 'react-intl'
+import {PageTitle} from '../../../../_metronic/layout/core'
+import {Navigate, Outlet, Route, Routes, useParams} from 'react-router-dom'
 import ProfileHeader from './header/ProfileHeader'
 import OwnerPage from './owner/OwnerPage'
 import LocationPage from './location/LocationPage'
@@ -32,12 +32,11 @@ import BookingView from '../../bookings/BookingView'
 import PublicEventView from '../../public-events/PublicEventView'
 import Financials from './financials/Financials'
 
-
 function ProfilePage() {
   const intl = useIntl()
   const breadCrumbs = [
     {
-      title: intl.formatMessage({ id: 'MENU.DASHBOARD' }),
+      title: intl.formatMessage({id: 'MENU.DASHBOARD'}),
       path: '/dashboard',
       isSeparator: false,
       isActive: false,
@@ -49,7 +48,7 @@ function ProfilePage() {
       isActive: false,
     },
     {
-      title: intl.formatMessage({ id: 'PARTNERS' }),
+      title: intl.formatMessage({id: 'PARTNERS'}),
       path: '/partners',
       isSeparator: false,
       isActive: false,
@@ -105,7 +104,7 @@ function ProfilePage() {
             </>
           }
         />
-             <Route
+        <Route
           path=':userId/branches'
           element={
             <>
@@ -113,7 +112,7 @@ function ProfilePage() {
             </>
           }
         />
-            <Route
+        <Route
           path=':userId/branches/branch-details'
           element={
             <>
@@ -300,6 +299,14 @@ function ProfilePage() {
           </>
         }
       />
+      <Route
+  path=':userId/branches/:itemId/translation'
+  element={
+    <>
+      <Translation modelName={'partner-branch'} model={'branches'} />
+    </>
+  }
+/>
     </Routes>
   )
 }

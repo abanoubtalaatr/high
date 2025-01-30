@@ -37,14 +37,14 @@ function LocationPage() {
           <span className='fw-bolder mb-3'>location</span>
         </h5>
         <div className='card-toolbar gap-3 mb-5'>
-          {/* <button
+          <button
             type='button'
             className='btn btn-light btn-sm btn-flex fw-bold'
-            // onClick={openEditModal}
+            onClick={openEditModal}
           >
             <KTIcon iconName='pencil' className='fs-6 text-muted me-1' disabled />
             edit
-          </button> */}
+          </button>
         </div>
         {/* modal */}
         {showEditModal && (

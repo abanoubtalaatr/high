@@ -15,16 +15,33 @@ const user = getAuth()
 const userToken = user ? user.data.token : ''
 
 export function getCountries(props) {
+  return axios.get(COUNTRIES_URL, {
+    params: props,
+  })
+}
+
+export function getGeneralCountries(props) {
   return axios.get(GENERAL_COUNTRIES_URL, {
     params: props,
   })
 }
 export function getCities(props) {
+  return axios.get(CITIES_URL, {
+    params: props,
+  })
+}
+export function getGeneralCities(props) {
   return axios.get(GENERAL_CITIES_URL, {
     params: props,
   })
 }
 export function getStates(props) {
+  return axios.get(STATES_URL, {
+    params: props,
+  })
+}
+
+export function getGeneralStates(props) {
   return axios.get(GENERAL_STATES_URL, {
     params: props,
   })

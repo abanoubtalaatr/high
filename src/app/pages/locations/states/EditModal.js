@@ -4,7 +4,7 @@ import Select from 'react-select'
 import clsx from 'clsx'
 import {useFormik} from 'formik'
 import {Modal} from 'react-bootstrap'
-import {getCountries, updateState} from '../_requests'
+import {getGeneralCountries, updateState} from '../_requests'
 import StateSearchMap from '../../../components/google-map/StateSearchMap'
 
 function EditModal(props) {
@@ -111,7 +111,7 @@ function EditModal(props) {
       setIsCountriesDisabled(true)
       locationHandler()
       statusDefaultValue()
-      getCountries()
+      getGeneralCountries()
         .then((res) => {
           countriesOptionsHandler(res.data.data)
           setIsCountriesLoading(false)

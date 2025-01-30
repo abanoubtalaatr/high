@@ -4,7 +4,7 @@ import Select from 'react-select'
 import clsx from 'clsx'
 import { useFormik } from 'formik'
 import { Button, Modal } from 'react-bootstrap'
-import { createCity,  getCountries, getStates } from '../_requests'
+import { createCity,  getGeneralCountries, getGeneralStates } from '../_requests'
 import CitiesSearchMap from '../../../components/google-map/CitiesSearchMap'
 
 function CreateModal(props) {
@@ -132,7 +132,7 @@ function CreateModal(props) {
   }
   const getStatesHandler = (countryIso) => {
     setLoadMap(false)
-    getStates({ country_iso: countryIso })
+    getGeneralStates({ country_iso: countryIso })
       .then((res) => {
         if (res.data.data.length > 0) {
           setStatesOptions(
@@ -172,7 +172,7 @@ function CreateModal(props) {
   useEffect(() => {
     if (show) {
       locationHandler()
-      getCountries()
+      getGeneralCountries()
         .then((res) => {
           countriesOptionsHandler(res.data.data)
         })

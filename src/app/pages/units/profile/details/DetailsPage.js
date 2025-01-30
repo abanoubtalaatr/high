@@ -137,10 +137,10 @@ function DetailsPage() {
                 <td className='w-lg-300px'>gender</td>
                 <td className='text-gray-700 fw-bolder'>{unitDetails.gender || '---'}</td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td className='w-lg-300px'>starting from</td>
                 <td className='text-gray-700 fw-bolder'>{unitDetails.starting_from  || '---'} SAR</td>
-              </tr>
+              </tr> */}
               <tr>
                 <td className='w-lg-300px'>created at</td>
                 <td className='text-gray-700 fw-bolder'>{unitDetails.created_at || '---'}</td>

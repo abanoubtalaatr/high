@@ -49,7 +49,7 @@ function Financials() {
           path='list'
           element={
             <>
-              <FinancialsToolbarWrapper />
+              {/* <FinancialsToolbarWrapper /> */}
               <PageTitle breadcrumbs={breadCrumbs}>
                 {intl.formatMessage({ id: 'FINANCIALS' })}
               </PageTitle>

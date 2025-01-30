@@ -9,6 +9,7 @@ import {
   getPartnerUnits,
   getStates,
   updateLocation,
+  getBranches,
 } from '../../_requests'
 import {Modal} from 'react-bootstrap'
 import {useFormik} from 'formik'
@@ -57,7 +58,10 @@ function EditLocationModal(props) {
     {value: 'main', label: 'main'},
     {value: 'part', label: 'part'},
   ])
+  const [branchesOptions, setBranchesOptions] = useState([])
+
   const [typeChoice, setTypeChoice] = useState([])
+  const [branchChoice, setBranchChoice] = useState([])
   const [alertType, setAlertType] = useState('success')
   const [initialValues, setinitialValues] = useState({
     state_id: locationDetails.state.id,
@@ -69,11 +73,12 @@ function EditLocationModal(props) {
     latitude: locationDetails.latitude || '',
     longitude: locationDetails.longitude || '',
     type: locationDetails.type,
+    branch: locationDetails.branch ? locationDetails.branch.name : '', // Handle null/undefined case
   })
   const [countryIso, setCountryIso] = useState(
     locationDetails.country ? locationDetails.country.iso : ''
   )
-  useEffect(() => {}, [loadMap,countryIso])
+  useEffect(() => {}, [loadMap, countryIso])
   const [cityPlaceId, setCityPlaceId] = useState(
     locationDetails.city ? locationDetails.city.place_id : ''
   )
@@ -167,6 +172,14 @@ function EditLocationModal(props) {
         setIsPartnerUnitsDisabled(false)
       })
     getPartnerPartUnitsHandler(initialValues.main_field_id)
+    // getBranches().then((res) => {
+    //   setBranchesOptions(
+    //     res.data.data.map((el) => ({
+    //       label : el.name,
+    //       value : el.id
+    //     }))
+    //   )
+    // })
   }, [])
   useEffect(() => {
     partnerUnitsDefaultValue()
@@ -245,6 +258,11 @@ function EditLocationModal(props) {
       setPartSectionDisplay('block')
       setMainSectionDisplay('none')
     }
+  }
+
+  const onChangeBranches = (choice) => {
+    setBranchChoice(choice)
+    formik.setFieldValue('branch', choice.value)
   }
   const onChangeCity = (choice) => {
     setCityChoice(choice)
@@ -327,13 +345,14 @@ function EditLocationModal(props) {
     onSubmit: async (values, {setStatus, resetForm, setFieldValue}) => {
       console.log(values)
       const formData = new FormData()
-      
+
       formData.append('state_id', 1)
       formData.append('city_id', 1)
       formData.append('address', 'address from postman')
       formData.append('main_field_id', values.main_field_id)
       formData.append('place_id', values.place_id)
       formData.append('type', values.type)
+      formData.append('branch', values.branch)
       formData.append('longitude', values.longitude)
       formData.append('longitude', values.longitude)
       values.conflicted_with.forEach((c) => formData.append('conflicted_fields[]', c))
@@ -354,23 +373,22 @@ function EditLocationModal(props) {
           setLoading(false)
         }
       } else {
-        
         // if (googleMapDetails) {
-          try {
-            await updateLocation(values, unitId).then((res) => {
-              setAlertType('success')
-              resetForm()
-              setStatus(res.data.message)
-              setAlertText(res.data.message)
-              setLoading(false)
-              onComplete(true)
-            })
-          } catch (error) {
-            setAlertType('danger')
-            setStatus(error.response.data.message)
-            setAlertText(error.response.data.message)
+        try {
+          await updateLocation(values, unitId).then((res) => {
+            setAlertType('success')
+            resetForm()
+            setStatus(res.data.message)
+            setAlertText(res.data.message)
             setLoading(false)
-          }
+            onComplete(true)
+          })
+        } catch (error) {
+          setAlertType('danger')
+          setStatus(error.response.data.message)
+          setAlertText(error.response.data.message)
+          setLoading(false)
+        }
         // } else {
         //   // setAlertText('The selected address is not within the city')
         // }
@@ -407,12 +425,17 @@ function EditLocationModal(props) {
           )}
 
           {/* type */}
-        <div className='fs-6 text-gray-700 mb-10'>
-        
-  إذا كانت المدينة علي سبيل المثال الرياض وقمت بتغيير الموقع إلى مدينة أخرى، فلن يتم تحديث الإحداثيات.
+          <div className='fs-6 text-gray-700 mb-10'>
+            إذا كانت المدينة علي سبيل المثال الرياض وقمت بتغيير الموقع إلى مدينة أخرى، فلن يتم تحديث
+            الإحداثيات.
+          </div>
 
-        </div>
-
+          <div className='row mb-5'>
+            <label className='col-sm-3 form-label fw-bold'>Branch:</label>
+            <div className='col-sm-9'>
+              <div className='col-sm-9'>{locationDetails.branch?.name}</div>
+            </div>
+          </div>
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>type:</label>
             <div className='col-sm-9'>
@@ -576,15 +599,12 @@ function EditLocationModal(props) {
               <label className='col-sm-3 form-label fw-bold'>map:</label>
               <div className='col-12'>
                 <div className='w-100 h-300px'>
-                  
-                    <AddressSearchMap
-                      center={mapCenter}
-                      mapResult={mapResult}
-                      countryIso={countryIso}
-                      cityPlaceId={cityPlaceId}
-                      
-                    />
-                 
+                  <AddressSearchMap
+                    center={mapCenter}
+                    mapResult={mapResult}
+                    countryIso={countryIso}
+                    cityPlaceId={cityPlaceId}
+                  />
                 </div>
                 {formik.touched.address && formik.errors.address && (
                   <div className='fv-plugins-message-container'>
