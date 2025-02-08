@@ -59,7 +59,6 @@ function EditProfileModal(props) {
     gender: userDetails.gender,
     image: userDetails.photo || '',
     date_of_birth: userDetails.date_of_birth || new Date(),
-    biography : userDetails.biography
   })
   const onChangeImage = (event) => {
     const file = event.target.files[0]
@@ -237,27 +236,7 @@ function EditProfileModal(props) {
               )}
             </div>
           </div>
-          <div className='row mb-5'>
-            <label className='col-sm-3 form-label fw-bold'>biography:</label>
-            <div className='col-sm-9'>
-              <textarea
-                type='text'
-                autoComplete='off'
-                {...formik.getFieldProps('biography')}
-                className={clsx('form-control form-control-solid', {
-                  'is-invalid': formik.touched.biography && formik.errors.biography,
-                })}
-                placeholder='enter biography'
-              />
-              {formik.touched.biography && formik.errors.biography && (
-                <div className='fv-plugins-message-container'>
-                  <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.biography}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          
           {/* username */}
           <div className='row mb-5'>
             <label className='col-sm-3 form-label fw-bold'>username:</label>

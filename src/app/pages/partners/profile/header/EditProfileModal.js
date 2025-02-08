@@ -28,7 +28,7 @@ function EditProfileModal(props) {
   }
   const initialData = {
     photo: userDetails.photo,
-    bio: userDetails.bio,
+    bio: userDetails.bio??"",
     company_name: userDetails.company_name,
   }
   useEffect(() => {

@@ -526,7 +526,7 @@ function EditLocationModal(props) {
               <div className='col-sm-9'>
                 <Select
                   isLoading={isStatesLoading}
-                  isDisabled={isStatesDisabled}
+                  isDisabled={isStatesDisabled || locationDetails.type === 'part'}
                   isSearchable={true}
                   className='react-select-container'
                   classNamePrefix='react-select'
@@ -552,7 +552,7 @@ function EditLocationModal(props) {
               <div className='col-sm-9'>
                 <Select
                   isLoading={isCitiesLoading}
-                  isDisabled={isCitiesDisabled}
+                  isDisabled={isCitiesDisabled || locationDetails.type === 'part'}
                   isSearchable={true}
                   className='react-select-container'
                   classNamePrefix='react-select'
@@ -584,6 +584,8 @@ function EditLocationModal(props) {
                     'is-invalid': formik.touched.address && formik.errors.address,
                   })}
                   placeholder='your address'
+                  disabled={locationDetails.type === 'part'}
+
                 />
                 {formik.touched.address && formik.errors.address && (
                   <div className='fv-plugins-message-container'>
