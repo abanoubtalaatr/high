@@ -24,7 +24,7 @@ console.log(itemDetails,'details')
               <td className='w-lg-500px'>Price Per User</td>
               <td className='text-gray-700 fw-bolder'>
                 <div className='d-flex'>
-                  <span className='me-3'> {itemDetails.price_per_user || '0'} SAR</span>
+                  <span className='me-3'> {parseInt(itemDetails?.pricing?.price_per_user?.total_price)  || '0'} SAR</span>
                   <a
                     href='#'
                     className='btn-icon'
@@ -39,7 +39,7 @@ console.log(itemDetails,'details')
             <tr>
               <td className='w-lg-500px'>Charge For Leave Within</td>
               <td className='text-gray-700 fw-bolder'>
-                {itemDetails.charge_for_leave_within || '0'} Hours
+                {itemDetails?.pricing?.charge_for_leave_hours || '0'} Hours
               </td>
             </tr>
             {itemDetails.status.toLowerCase() == 'canceled' && (
@@ -74,7 +74,7 @@ console.log(itemDetails,'details')
                 <div className='d-flex'>
                   <span className='me-3'>
                     {' '}
-                    {itemDetails.total_payment_from_joined_players || '0'} SAR
+                    {parseInt(itemDetails?.pricing?.total_payment_from_joined_player?.price_per_user) * itemDetails?.pricing?.total_payment_from_joined_player?.total_joined_players || '0'} SAR
                   </span>
                   <a
                     href='#'
@@ -93,7 +93,7 @@ console.log(itemDetails,'details')
                 <div className='d-flex'>
                   <span className='me-3'>
                     {' '}
-                    {itemDetails.total_fee_from_left_players || '0'} SAR
+                    {parseInt(itemDetails?.pricing?.total_fees_from_left_player?.price_per_user) * itemDetails?.pricing?.total_fees_from_left_player?.total_left_late_players || '0'} SAR
                   </span>
                   <a
                     href='#'
@@ -110,7 +110,7 @@ console.log(itemDetails,'details')
               <td className='w-lg-500px'>Total Income From Public Event</td>
               <td className='text-gray-700 fw-bolder'>
                 <div className='d-flex'>
-                  <span className='me-3'> {itemDetails.total_income_from_event || '0'} SAR</span>
+                  <span className='me-3'> {itemDetails?.pricing?.total_collected || '0'} SAR</span>
                   <a
                     href='#'
                     className='btn-icon'
@@ -150,7 +150,7 @@ console.log(itemDetails,'details')
                 <tbody>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{parseInt(itemDetails?.pricing?.price_per_user?.total_price) } SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
@@ -162,7 +162,7 @@ console.log(itemDetails,'details')
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.total_income_from_event || '0'} SAR</td>
+                    <td className='text-gray-700'>{parseInt(itemDetails?.pricing?.price_per_user?.total_price) || '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Tax ({itemDetails?.pricing?.price_per_user?.tax_percent || '0'} %) :</td>
@@ -254,31 +254,31 @@ console.log(itemDetails,'details')
                 <tbody>
                   <tr>
                     <td>Total Number of Players :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.total_joined_players}</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_joined_players || 0}</td>
                   </tr>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.total_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.base_price|| '0'} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.discount|| '0'} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.discount|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.total_income_from_event|| '0'} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.total_price|| '0'} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax ({itemDetails?.pricing?.joinedPlayersPricingData?.discount_percent|| '0'} %) :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.joinedPlayersPricingData?.tax|| '0'} SAR</td>
+                    <td>Tax ({itemDetails?.pricing?.price_per_user?.tax_percent|| '0'} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.tax|| '0'} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.joinedPlayersPricingData?.total_price|| '0'} SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.price_per_user?.total_price * itemDetails?.pricing?.total_joined_players|| '0'} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}
@@ -314,27 +314,27 @@ console.log(itemDetails,'details')
                   </tr>
                   <tr>
                     <td>Fee Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails?.pricing?.total_payment_from_joined_player?.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_fees_from_left_player?.price_per_user} SAR</td>
                   </tr>
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>{} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>0.00 SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.discount} SAR</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>95.24 SAR</td>
-                  </tr>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price * parseInt(itemDetails?.pricing?.total_fees_from_left_player?.price_per_user)} SAR</td>
+                  </tr> */}
                   <tr>
-                    <td>Tax (5%) :</td>
-                    <td className='text-gray-700'>4.76 SAR</td>
+                    <td>Tax ({itemDetails?.pricing?.price_per_user?.tax_percent || 0} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.tax} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>100.00 SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{ itemDetails?.pricing?.total_fees_from_left_player?.total_left_late_players * itemDetails?.pricing?.total_fees_from_left_player?.price_per_user} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}
@@ -370,11 +370,11 @@ console.log(itemDetails,'details')
                   </tr>
                   <tr>
                     <td>Price per player :</td>
-                    <td className='text-gray-700'>{itemDetails?.price_per_user} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Total Number of left players with fee :</td>
-                    <td className='text-gray-700'>{itemDetails?.late_left_players_count} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.total_fees_from_left_player?.price_per_user * itemDetails?.pricing?.total_fees_from_left_player?.total_left_late_players} SAR</td>
                   </tr>
                   {/* <tr>
                     <td>Fee Price per player :</td>
@@ -382,23 +382,23 @@ console.log(itemDetails,'details')
                   </tr> */}
                   <tr>
                     <td>Base Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.base_price} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.base_price} SAR</td>
                   </tr>
                   <tr>
                     <td>Discount :</td>
-                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.discount} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.discount} SAR</td>
                   </tr>
                   <tr>
                     <td>Public Event Price :</td>
-                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.total_price} SAR</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.total_price} SAR</td>
                   </tr>
                   <tr>
-                    <td>Tax ({itemDetails?.eventPricingData?.discount_percent} %) :</td>
-                    <td className='text-gray-700'>{itemDetails?.eventPricingData?.tax} SAR</td>
+                    <td>Tax ({itemDetails?.pricing?.price_per_user?.tax_percent} %) :</td>
+                    <td className='text-gray-700'>{itemDetails?.pricing?.price_per_user?.tax} SAR</td>
                   </tr>
                   <tr>
                     <td>Total:</td>
-                    <td className='text-gray-700 fw-bolder'>{itemDetails?.eventPricingData?.total_price} SAR</td>
+                    <td className='text-gray-700 fw-bolder'>{itemDetails?.pricing?.total_collected} SAR</td>
                   </tr>
                 </tbody>
                 {/* end::Table body */}

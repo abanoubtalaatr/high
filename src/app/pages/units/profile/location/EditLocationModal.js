@@ -514,7 +514,7 @@ function EditLocationModal(props) {
             </div>
           </div>
           {/* main section */}
-          <div style={{display: mainSectionDisplay}}>
+          {/* <div style={{display: mainSectionDisplay}}> */}
             {/* country */}
             <div className='row mb-5'>
               <label className='col-sm-3 form-label fw-bold'>country:</label>
@@ -615,7 +615,7 @@ function EditLocationModal(props) {
                 )}
               </div>
             </div>
-          </div>
+          {/* </div> */}
           {/* form button */}
           <div className='d-flex justify-content-between'>
             <button type='button' className='btn btn-light mt-5 mb-5' onClick={onHide}>

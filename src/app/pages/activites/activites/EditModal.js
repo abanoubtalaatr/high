@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import { Modal } from 'react-bootstrap'
 import { KTIcon, toAbsoluteUrl } from '../../../../_metronic/helpers'
 import { getActivitesCategories, getactivity, updateactivity } from '../_requests'
-import { getCapacities, getServices, getTypes } from '../../setup-files/_requests'
+import { getGeneralCapacities, getGeneralServices, getGeneralTypes } from '../../setup-files/_requests'
 import { useParams } from 'react-router-dom'
 import Select from 'react-select'
 
@@ -251,7 +251,7 @@ function EditModal(props) {
   const getTypesHandler = () => {
     setIsTypesLoading(false)
     setIsTypesDisabled(false)
-    getTypes()
+    getGeneralTypes()
       .then((res) => {
         typesOptionsHandler(res.data.data)
       })
@@ -262,7 +262,7 @@ function EditModal(props) {
   // get capacities
   const getCapacitiesHandler = () => {
     
-    getCapacities()
+    getGeneralCapacities()
       .then((res) => {
         capacitiesOptionsHandler(res.data.data)
       })
@@ -273,7 +273,7 @@ function EditModal(props) {
   // get services
   const getServicesHandler = () => {
     
-    getServices()
+    getGeneralServices()
       .then((res) => {
         servicesOptionsHandler(res.data.data)
       })

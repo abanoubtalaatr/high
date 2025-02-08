@@ -10,15 +10,20 @@ function BookingsWrapper(props) {
   const [comingBookings, setComingBookings] = useState([])
   const [endedBookings, setEndedBookings] = useState([])
   const [cancelledBookings, setCancelledBookings] = useState([])
+  const getCurrentMonth = () => {
+    const date = new Date();
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`; // Format YYYY-MM
+  };
   const [parms, setParms] = useState({
     country_iso: '',
     state_id: '',
     city_id: '',
     category_id: '',
     activity_id: '',
-    filter_by: 'all',
-    filter_value: '',
+    filter_by: 'month',
+    filter_value: getCurrentMonth(), // Set default to current month
   })
+
   const filterHandler = (category_id, activity_id, filter_by, filter_value) => {
     setParms({
       ...parms,

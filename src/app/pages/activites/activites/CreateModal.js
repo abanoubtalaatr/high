@@ -7,7 +7,7 @@ import { KTIcon, toAbsoluteUrl } from '../../../../_metronic/helpers'
 import { createactivity } from '../_requests'
 import Select from 'react-select'
 import { useParams } from 'react-router-dom'
-import { getCapacities, getServices, getTypes } from '../../setup-files/_requests'
+import { getGeneralCapacities, getGeneralServices, getGeneralTypes } from '../../setup-files/_requests'
 
 function CreateModal(props) {
   const { show, onHide } = props
@@ -141,7 +141,7 @@ function CreateModal(props) {
       setIsCapacitiesDisabled(true)
       setIsServicesLoading(true)
       setIsServicesDisabled(true)
-      getTypes()
+      getGeneralTypes()
         .then((res) => {
           typesOptionsHandler(res.data.data)
           setIsTypesLoading(false)
@@ -160,14 +160,14 @@ function CreateModal(props) {
           setIsServicesLoading(false)
           setIsServicesDisabled(false)
         })
-      getCapacities()
+        getGeneralCapacities()
         .then((res) => {
           capacitiesOptionsHandler(res.data.data)
         })
         .catch((err) => {
           capacitiesOptionsHandler([])
         })
-      getServices()
+      getGeneralServices()
         .then((res) => {
           servicesOptionsHandler(res.data.data)
         })

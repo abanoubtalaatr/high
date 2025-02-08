@@ -61,12 +61,7 @@ const SidebarMenuMain = () => {
       title={intl.formatMessage({id: 'FINANCIALS'})}
       fontIcon='bi-app-indicator'
     />
-    <SidebarMenuItem
-      to='/banks/list'
-      icon='bank'
-      title={intl.formatMessage({id: 'BANKS'})}
-      fontIcon='bi-app-indicator'
-    />
+    
       <SidebarMenuItem
       to='/wallet'
       icon='wallet'
@@ -90,6 +85,7 @@ const SidebarMenuMain = () => {
           <SidebarMenuItem to='/setup-files/services' title={intl.formatMessage({id: 'SERVICES'})} hasBullet={true} />
           <SidebarMenuItem to='/setup-files/age-groups' title={intl.formatMessage({id: 'AGE_GROUPS'})} hasBullet={true} />
           <SidebarMenuItem to='/setup-files/languages' title={intl.formatMessage({id: 'LANGUAGES'})} hasBullet={true} />
+          <SidebarMenuItem to='/banks/list' title={intl.formatMessage({id: 'banks'})} hasBullet={true} />
       </SidebarMenuItemWithSub>
       
       <SidebarMenuItemWithSub

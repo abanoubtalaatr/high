@@ -79,6 +79,10 @@ function CashOutModal(props) {
                 <td className='text-gray-700'>{transactionDetails.action_reason || '---'}</td>
               </tr>
               <tr>
+                <td>comment:</td>
+                <td className='text-gray-700'>{transactionDetails.fund_reason || '---'}</td>
+              </tr>
+              <tr>
                 <td>action by:</td>
                 <td className='text-gray-700'>{transactionDetails.action_by ? transactionDetails.action_by.name : '---'}</td>
               </tr>

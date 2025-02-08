@@ -32,6 +32,7 @@ export function updateUserInfo(values, userId) {
     gender: values.gender.toLowerCase(),
     image: values.image,
     date_of_birth: values.date_of_birth,
+    biography : values.biography
   })
 }
 // profile

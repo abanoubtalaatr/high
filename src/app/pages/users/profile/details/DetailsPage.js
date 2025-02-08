@@ -80,6 +80,10 @@ function DetailsPage() {
                 <td className='text-gray-700 fw-bolder'>{userDetails.name || '---'}</td>
               </tr>
               <tr>
+                <td className='w-lg-300px'>biography</td>
+                <td className='text-gray-700 fw-bolder'>{userDetails.biography || '---'}</td>
+              </tr>
+              <tr>
                 <td className='w-lg-300px'>username</td>
                 <td className='text-gray-700 fw-bolder'>
                   {userDetails.high_five_user_name || '---'}
